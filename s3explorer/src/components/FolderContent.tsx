@@ -15,6 +15,7 @@ function FolderContent() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setPath([]);
     const fetchBucketContents = async () => {
       if (active_bucket) {
         setLoading(true);
@@ -39,7 +40,7 @@ function FolderContent() {
     );
 
   return (
-    <div className="p-6 flex h-screen flex-col">
+    <div className="p-6 flex h-screen flex-col overflow-hidden">
       <div className="flex flex-wrap gap-3">
         <h1
           onClick={() => {
@@ -73,14 +74,14 @@ function FolderContent() {
                   addPath(content.name);
                 }
               }}
-              className="p-3 rounded-md flex w-[140px] h-[140px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 duration-150"
+              className="p-3 rounded-md flex w-[140px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 duration-150"
             >
               <img
                 src={content.type === 'file' ? '/file_icon.png' : 'folder.png'}
                 alt="folder icon"
                 width={90}
               />
-              <span className="w-[120px] text-center truncate">
+              <span className="w-[120px] text-center line-clamp-3">
                 {content.name}
               </span>
             </div>

@@ -16,17 +16,18 @@ function Sidebar() {
   }, []);
 
   return (
-    <div>
-      <h2 className="mt-4 text-xl font-semibold">Buckets</h2>
-      <div className="p-3">
-        <ul className="select-none">
+    <div className="flex flex-col">
+      <h2 className="mt-4 text-xl font-semibold px-6">Buckets</h2>
+      <div className="flex-grow">
+        <ul className="select-none overflow-auto h-[600px] px-6">
           {buckets.map((bucket) => (
             <li
               onClick={() => setActiveBucket(bucket)}
               key={bucket}
-              className="p-2 flex gap-3 hover:bg-slate-200 cursor-pointer rounded-md text-black"
+              className="p-2 flex gap-3 hover:bg-slate-200 cursor-pointer rounded-md text-black h-[40px]"
             >
-              <Folder /> <span className="truncate">{bucket}</span>
+              <Folder size={24} />{' '}
+              <span className="truncate w-full">{bucket}</span>
             </li>
           ))}
         </ul>

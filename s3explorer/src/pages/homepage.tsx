@@ -6,8 +6,8 @@ import Sidebar from '../components/Sidebar';
 function HomePage() {
   return (
     <div className="w-full h-screen flex">
-      <div className="w-[300px] bg-slate-100 h-full p-6">
-        <h1 className="font-bold text-2xl flex gap-3 items-center">
+      <div className="w-[300px] bg-slate-100 h-full">
+        <h1 className="font-bold text-2xl flex gap-3 items-center p-6">
           <CompassIcon size={42} />
           S3 Explorer
         </h1>

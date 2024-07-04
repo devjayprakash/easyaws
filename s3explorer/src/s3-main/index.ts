@@ -4,15 +4,8 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { ipcMain } from 'electron';
-import { CLIENT_ID, CLIENT_SECRET } from '../temp';
 
-const s3 = new S3Client({
-  region: 'us-east-1',
-  credentials: {
-    accessKeyId: CLIENT_ID,
-    secretAccessKey: CLIENT_SECRET,
-  },
-});
+const s3 = new S3Client();
 
 export const getObjectsInsideABucket = async () => {
   const getBuckets = new ListBucketsCommand();
