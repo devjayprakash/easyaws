@@ -63,7 +63,7 @@ function FolderContent() {
           </div>
         ))}
       </div>
-      <div className=" gap-3 mt-6 flex-grow flex-wrap flex overflow-auto">
+      <div className="gap-3 mt-6 flex-wrap flex overflow-auto">
         {currentTree
           ?.sort((a) => (a.type === 'folder' ? -1 : 1))
           .map((content) => (
