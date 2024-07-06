@@ -18,6 +18,7 @@ type GlobalStore = {
   path: Array<string>;
   addPath: (path: string) => void;
   removePath: (path: string) => void;
+  goBack: () => void;
   setPath: (path: Array<string>) => void;
   currentTree: Array<S3TreeNode> | null;
   setCurrentTree: (path: Array<string>) => void;
@@ -87,6 +88,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
       return { ...state, currentTree: tree };
     }),
   setPath: (path) => set({ path }),
+  goBack: () => set((state) => ({ path: state.path.slice(0, -1) })),
 }));
 
 export default useGlobalStore;

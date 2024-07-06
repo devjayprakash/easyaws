@@ -1,4 +1,4 @@
-import { FolderArchive, RocketIcon, SearchIcon, XCircle } from 'lucide-react';
+import { Database, SearchIcon, XCircle } from 'lucide-react';
 import React, { useEffect } from 'react';
 import useTabs from '../store/tab-store';
 import FolderContent from './FolderContent';
@@ -18,18 +18,14 @@ function Sidebar() {
   }, []);
 
   return (
-    <div className="w-[230px] flex-shrink-0 h-screen dark:bg-slate-900 bg-slate-200 flex flex-col">
-      <div className="flex gap-3 p-3 items-center text-xl font-semibold justify-center">
-        <RocketIcon size={24} />
-        <div>S3 Explorer</div>
-      </div>
-      <div className="flex gap-2 items-center mx-2 rounded-md px-2 dark:bg-slate-800 bg-slate-300">
+    <div className="w-[230px] py-10 flex-shrink-0 h-screen dark:bg-gray-900 bg-gray-200 flex flex-col">
+      <div className="flex gap-2 items-center mx-2 rounded-md px-2 dark:bg-gray-800 bg-gray-300">
         <SearchIcon size={20} />
         <input
           value={searchTerm}
           type="text"
           placeholder="Search buckets"
-          className="p-2 outline-none w-full dark:bg-slate-800 bg-slate-300 dark:text-white text-sm"
+          className="p-2 outline-none w-full dark:bg-gray-800 bg-gray-300 dark:text-white text-sm"
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         {searchTerm && (
@@ -56,9 +52,9 @@ function Sidebar() {
                 addTab(tab);
                 setActiveTab(tab);
               }}
-              className="p-2 flex items-center gap-2 rounded-md cursor-pointer hover:bg-slate-800 duration-150"
+              className="p-2 flex items-center gap-2 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150"
             >
-              <FolderArchive size={20} className="flex-shrink-0" />
+              <Database size={20} className="flex-shrink-0" />
               <div className="text-sm truncate">{bucket}</div>
             </div>
           ))}

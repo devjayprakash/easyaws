@@ -8,8 +8,10 @@ if (require('electron-squirrel-startup')) {
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1080,
+    height: 720,
+    titleBarStyle: 'hiddenInset',
+    frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -23,7 +25,7 @@ const createWindow = () => {
     );
   }
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);

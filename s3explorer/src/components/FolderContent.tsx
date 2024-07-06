@@ -33,7 +33,7 @@ const FolderContent: React.FC<{
 
   if (loading)
     return (
-      <div className="w-full h-full flex justify-center items-center text-xl text-slate-400">
+      <div className="w-full h-full flex justify-center items-center text-xl text-gray-400">
         Loading...
       </div>
     );
@@ -45,7 +45,7 @@ const FolderContent: React.FC<{
           onClick={() => {
             setPath([]);
           }}
-          className="p-2 flex gap-2 text-sm items-center max-w-[200px] dark:hover:bg-slate-900 rounded-md cursor-pointer"
+          className="p-2 flex gap-2 text-sm items-center max-w-[200px] dark:hover:bg-gray-900 rounded-md cursor-pointer"
         >
           <HomeIcon className="flex-shrink-0" size={16} />
           <div className="truncate">{active_bucket}</div>
@@ -56,7 +56,7 @@ const FolderContent: React.FC<{
             onClick={() => {
               setPath(path.slice(0, i + 1));
             }}
-            className="flex gap-2 text-sm items-center cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 p-2 rounded-md duration-150"
+            className="flex gap-2 text-sm items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 p-2 rounded-md duration-150"
           >
             <span>&gt;</span>
             <FolderArchiveIcon size={16} />
@@ -76,7 +76,7 @@ const FolderContent: React.FC<{
                 } else {
                   const tab = {
                     name: content.name,
-                    id: content.name,
+                    id: content.real_key,
                     content: (
                       <TextEditor
                         bucket={active_bucket}
@@ -88,7 +88,7 @@ const FolderContent: React.FC<{
                   setActiveTab(tab);
                 }
               }}
-              className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 duration-150"
+              className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
             >
               <img
                 src={content.type === 'file' ? '/file_icon.png' : 'folder.png'}
