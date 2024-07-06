@@ -1,12 +1,13 @@
 import { FolderArchive, RocketIcon, SearchIcon, XCircle } from 'lucide-react';
 import React, { useEffect } from 'react';
-import useGlobalStore from '../store/global';
+import useTabs from '../store/tab-store';
+import FolderContent from './FolderContent';
 
 function Sidebar() {
   const [buckets, setBuckets] = React.useState<Array<string>>([]);
   const [searchTerm, setSearchTerm] = React.useState<string>('');
 
-  const { setActiveBucket } = useGlobalStore();
+  const { addTab, setActiveTab } = useTabs();
 
   useEffect(() => {
     const getBucketData = async () => {
@@ -45,7 +46,16 @@ function Sidebar() {
           .filter((b) => b.includes(searchTerm))
           .map((bucket) => (
             <div
-              onClick={() => setActiveBucket(bucket)}
+              key={bucket}
+              onClick={() => {
+                const tab = {
+                  name: bucket,
+                  id: bucket,
+                  content: <FolderContent active_bucket={bucket} />,
+                };
+                addTab(tab);
+                setActiveTab(tab);
+              }}
               className="p-2 flex items-center gap-2 rounded-md cursor-pointer hover:bg-slate-800 duration-150"
             >
               <FolderArchive size={20} className="flex-shrink-0" />

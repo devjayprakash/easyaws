@@ -42,6 +42,7 @@
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.609.0",
+    "@monaco-editor/react": "^4.6.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "electron-squirrel-startup": "^1.0.1",
     "lucide-react": "^0.400.0",

@@ -2,16 +2,11 @@ import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import useGlobalStore, { ContentResult } from '../store/global';
 
-function FolderContent() {
-  const {
-    active_bucket,
-    currentTree,
-    createTree,
-    path,
-    setCurrentTree,
-    addPath,
-    setPath,
-  } = useGlobalStore();
+const FolderContent: React.FC<{
+  active_bucket: string;
+}> = ({ active_bucket }) => {
+  const { currentTree, createTree, path, setCurrentTree, addPath, setPath } =
+    useGlobalStore();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -34,13 +29,13 @@ function FolderContent() {
 
   if (loading)
     return (
-      <div className="w-full h-screen flex justify-center items-center text-xl text-slate-400">
+      <div className="w-full h-full flex justify-center items-center text-xl text-slate-400">
         Loading...
       </div>
     );
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden">
       <div className="flex flex-wrap gap-1 p-2 items-center">
         <div
           onClick={() => {
@@ -89,6 +84,6 @@ function FolderContent() {
       </div>
     </div>
   );
-}
+};
 
 export default FolderContent;

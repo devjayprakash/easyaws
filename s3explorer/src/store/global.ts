@@ -12,8 +12,6 @@ export interface ContentResult {
 }
 
 type GlobalStore = {
-  active_bucket: string | null;
-  setActiveBucket: (bucket: string) => void;
   tree: S3TreeNode[] | null;
   createTree: (objects: Array<ContentResult>) => void;
   path: Array<string>;
@@ -45,8 +43,6 @@ const addToTree = (tree: S3TreeNode[], path: string) => {
 };
 
 const useGlobalStore = create<GlobalStore>((set) => ({
-  active_bucket: null,
-  setActiveBucket: (bucket) => set({ active_bucket: bucket }),
   tree: null,
   path: [],
   createTree: (objects) =>
