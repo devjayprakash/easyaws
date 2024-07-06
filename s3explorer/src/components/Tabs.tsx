@@ -7,18 +7,18 @@ const Tabs: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col">
-      <div className="flex flex-shrink-0 border-b border-gray-600 w-full items-center overflow-x-auto">
+      <div className="flex flex-shrink-0 border-b dark:border-gray-600 w-full items-center overflow-x-auto">
         {tabs.map((tab) => (
           <div
             onClick={() => setActiveTab(tab)}
             key={tab.name}
-            className={`px-3 py-1 flex-shrink-0 flex gap-2 items-center cursor-pointer text-sm border-t-[2px] border-r border-gray-600 ${
+            className={`px-3 py-1 flex-shrink-0 flex gap-2 items-center cursor-pointer text-sm border-t-[2px] border-r dark:border-gray-600 ${
               tab.id === activeTab?.id
-                ? 'text-white border-t-sky-500'
-                : 'bg-slate-950 text-gray-400'
+                ? 'dark:text-white border-t-sky-400'
+                : 'dark:bg-slate-950 dark:text-gray-400'
             }`}
           >
-            <File size={12} /> <span className="text-sm">{tab.name}</span>
+            <File size={16} /> <span className="text-sm">{tab.name}</span>
             <XIcon
               onClick={() => {
                 removeTab(tab);

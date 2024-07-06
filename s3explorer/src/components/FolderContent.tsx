@@ -1,12 +1,16 @@
 import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import useGlobalStore, { ContentResult } from '../store/global';
+import useTabs from '../store/tab-store';
+import TextEditor from './Editor';
 
 const FolderContent: React.FC<{
   active_bucket: string;
 }> = ({ active_bucket }) => {
   const { currentTree, createTree, path, setCurrentTree, addPath, setPath } =
     useGlobalStore();
+  const { addTab, setActiveTab } = useTabs();
+
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -48,6 +52,7 @@ const FolderContent: React.FC<{
         </div>
         {path.map((p, i) => (
           <div
+            key={`path-${i}`}
             onClick={() => {
               setPath(path.slice(0, i + 1));
             }}
@@ -64,9 +69,23 @@ const FolderContent: React.FC<{
           ?.sort((a) => (a.type === 'folder' ? -1 : 1))
           .map((content) => (
             <div
+              key={content.name}
               onClick={() => {
                 if (content.type === 'folder') {
                   addPath(content.name);
+                } else {
+                  const tab = {
+                    name: content.name,
+                    id: content.name,
+                    content: (
+                      <TextEditor
+                        bucket={active_bucket}
+                        obj_key={content.real_key}
+                      />
+                    ),
+                  };
+                  addTab(tab);
+                  setActiveTab(tab);
                 }
               }}
               className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 duration-150"

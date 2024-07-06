@@ -4,6 +4,7 @@ export interface S3TreeNode {
   name: string;
   type: 'folder' | 'file';
   children?: S3TreeNode[];
+  real_key: string;
 }
 export interface ContentResult {
   Key: string;
@@ -24,6 +25,7 @@ type GlobalStore = {
 
 const addToTree = (tree: S3TreeNode[], path: string) => {
   const parts = path.split('/');
+
   let current = tree;
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i];
@@ -35,6 +37,7 @@ const addToTree = (tree: S3TreeNode[], path: string) => {
         name: part,
         type: i === parts.length - 1 ? 'file' : 'folder',
         children: i === parts.length - 1 ? undefined : [],
+        real_key: path,
       };
       current.push(node);
       current = node.children!;

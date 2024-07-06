@@ -1,4 +1,5 @@
 import {
+  GetObjectCommand,
   ListBucketsCommand,
   ListObjectsV2Command,
   S3Client,
@@ -14,6 +15,38 @@ export const getObjectsInsideABucket = async () => {
 };
 
 export const startS3DataBridge = async () => {
+  ipcMain.handle('get-object-content', async (_, type, key, bucket) => {
+    const allowed_types = [
+      'text/plain',
+      'application/json',
+      'application/javascript',
+      'text/html',
+    ];
+
+    if (!allowed_types.includes(type)) {
+      return null;
+    }
+
+    try {
+      const result = await s3.send(
+        new GetObjectCommand({
+          Bucket: bucket,
+          Key: key,
+        })
+      );
+
+      const text_data = await result.Body.transformToString();
+
+      return {
+        value: text_data,
+        type: result.ContentType,
+      };
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  });
+
   ipcMain.handle('get-buckets', async () => {
     const result = await getObjectsInsideABucket();
     return result;
