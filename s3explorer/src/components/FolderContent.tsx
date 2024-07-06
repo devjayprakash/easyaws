@@ -1,4 +1,4 @@
-import { FolderArchiveIcon } from 'lucide-react';
+import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import useGlobalStore, { ContentResult } from '../store/global';
 
@@ -40,31 +40,31 @@ function FolderContent() {
     );
 
   return (
-    <div className="p-6 flex h-screen flex-col overflow-hidden">
-      <div className="flex flex-wrap gap-3">
-        <h1
+    <div className="flex h-screen flex-col overflow-hidden">
+      <div className="flex flex-wrap gap-1 p-2 items-center">
+        <div
           onClick={() => {
             setPath([]);
           }}
-          className="flex gap-3 text-xl items-center cursor-pointer hover:bg-slate-200 p-2 rounded-md duration-150"
+          className="p-2 flex gap-2 text-sm items-center max-w-[200px] dark:hover:bg-slate-900 rounded-md cursor-pointer"
         >
-          <FolderArchiveIcon size={42} />
-          <span>{active_bucket}</span>
-        </h1>
+          <HomeIcon className="flex-shrink-0" size={16} />
+          <div className="truncate">{active_bucket}</div>
+        </div>
         {path.map((p, i) => (
           <div
             onClick={() => {
               setPath(path.slice(0, i + 1));
             }}
-            className="flex gap-3 text-xl items-center cursor-pointer hover:bg-slate-200 p-2 rounded-md duration-150"
+            className="flex gap-2 text-sm items-center cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 p-2 rounded-md duration-150"
           >
             <span>&gt;</span>
-            <FolderArchiveIcon size={42} />
-            <span>{p}</span>
+            <FolderArchiveIcon size={16} />
+            <span className="max-w-[200px] truncate">{p}</span>
           </div>
         ))}
       </div>
-      <div className="gap-3 mt-6 flex-wrap flex overflow-auto">
+      <div className="gap-3 flex-wrap flex overflow-auto p-2">
         {currentTree
           ?.sort((a) => (a.type === 'folder' ? -1 : 1))
           .map((content) => (
@@ -74,14 +74,14 @@ function FolderContent() {
                   addPath(content.name);
                 }
               }}
-              className="p-3 rounded-md flex w-[140px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 duration-150"
+              className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-900 duration-150"
             >
               <img
                 src={content.type === 'file' ? '/file_icon.png' : 'folder.png'}
                 alt="folder icon"
                 width={90}
               />
-              <span className="w-[120px] text-center line-clamp-3">
+              <span className="w-[80px] text-xs text-center line-clamp-3">
                 {content.name}
               </span>
             </div>
