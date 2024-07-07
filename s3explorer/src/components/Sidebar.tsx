@@ -50,7 +50,7 @@ function Sidebar() {
                   content: <FolderContent active_bucket={bucket} />,
                 };
                 addTab(tab);
-                setActiveTab(tab);
+                setActiveTab(tab.id);
               }}
               className="p-2 flex items-center gap-2 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150"
             >

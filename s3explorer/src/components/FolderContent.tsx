@@ -1,5 +1,6 @@
 import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useReducer } from 'react';
+import { FileIcon } from 'react-file-icon';
 import {
   ContentResult,
   folderContentReducer,
@@ -104,8 +105,8 @@ const FolderContent: React.FC<{
         }}
       />
       {state.layout === 'list' && (
-        <div className="overflow-auto w-full">
-          <table className="m-6 table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
+        <div className="overflow-auto w-full mt-6 mx-3">
+          <table className="mx-6 table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
             <thead>
               <tr className="table-row">
                 <th></th>
@@ -118,7 +119,7 @@ const FolderContent: React.FC<{
                 .sort((a) => (a.type === 'folder' ? -1 : 1))
                 .map((content) => (
                   <tr
-                    className="table-row hover:bg-slate-700 cursor-pointer"
+                    className="table-row dark:hover:bg-slate-700 hover:bg-slate-200 rounded-md cursor-pointer"
                     onClick={() => {
                       if (content.type === 'folder') {
                         dispatch({
@@ -142,15 +143,13 @@ const FolderContent: React.FC<{
                     }}
                   >
                     <td className="p-2">
-                      <img
-                        src={
-                          content.type === 'file'
-                            ? '/file_icon.png'
-                            : 'folder.png'
-                        }
-                        alt="folder icon"
-                        width={20}
-                      />
+                      {content.type === 'file' ? (
+                        <div className="w-8 h-8">
+                          <FileIcon extension={content.name.split('.').pop()} />
+                        </div>
+                      ) : (
+                        <img src={'/folder.png'} alt="folder icon" width={20} />
+                      )}
                     </td>
                     <td className="table-cell">{content.name}</td>
                     <td>{content.type}</td>
@@ -186,18 +185,18 @@ const FolderContent: React.FC<{
                       ),
                     };
                     addTab(tab);
-                    setActiveTab(tab);
+                    setActiveTab(tab.id);
                   }
                 }}
                 className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
               >
-                <img
-                  src={
-                    content.type === 'file' ? '/file_icon.png' : 'folder.png'
-                  }
-                  alt="folder icon"
-                  width={90}
-                />
+                {content.type === 'file' ? (
+                  <div className="w-14 h-14 mb-5">
+                    <FileIcon extension={content.name.split('.').pop()} />
+                  </div>
+                ) : (
+                  <img src={'/folder.png'} alt="folder icon" width={60} />
+                )}
                 <span className="w-[80px] text-xs text-center line-clamp-3">
                   {content.name}
                 </span>
