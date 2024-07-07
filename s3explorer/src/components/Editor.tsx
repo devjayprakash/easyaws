@@ -21,21 +21,21 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
 
   useEffect(() => {
     const handleSave = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 's') {
-        window.s3_api.saveObjectContent(value, obj_key, bucket);
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        window.s3_api.saveObjectContent(obj_key, value, bucket);
       }
     };
     window.addEventListener('keydown', handleSave);
     return () => {
       window.removeEventListener('keydown', handleSave);
     };
-  }, []);
+  }, [value]);
 
   return (
     <div className="h-screen">
       <Editor
+        value={value}
         onChange={(value) => setValue(value)}
-        defaultValue={value}
         theme="vs-dark"
       />
     </div>

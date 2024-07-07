@@ -2,6 +2,7 @@ import {
   GetObjectCommand,
   ListBucketsCommand,
   ListObjectsV2Command,
+  PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { ipcMain } from 'electron';
@@ -15,6 +16,26 @@ export const getObjectsInsideABucket = async () => {
 };
 
 export const startS3DataBridge = async () => {
+  ipcMain.handle('save-object-content', async (_, key, value, bucket) => {
+    console.log(key, value, bucket);
+
+    try {
+      const result = await s3.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
+          Body: value,
+        })
+      );
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  });
+
   ipcMain.handle('get-object-content', async (_, type, key, bucket) => {
     const allowed_types = [
       'text/plain',

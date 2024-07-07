@@ -3,6 +3,26 @@ import { contextBridge, ipcRenderer } from 'electron';
 const cache: { [e: string]: any } = {};
 
 contextBridge.exposeInMainWorld('s3_api', {
+  saveObjectContent: async (key: string, value: string, bucket: string) => {
+    try {
+      console.log({ key, value, bucket });
+      const result = await ipcRenderer.invoke(
+        'save-object-content',
+        key,
+        value,
+        bucket
+      );
+
+      cache[key] = {
+        value,
+      };
+
+      return result;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  },
   getObjectContent: async (type: string, key: string, bucket: string) => {
     if (cache[key]) {
       return cache[key];

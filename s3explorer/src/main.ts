@@ -12,6 +12,7 @@ const createWindow = () => {
     height: 720,
     titleBarStyle: 'hiddenInset',
     frame: false,
+    icon: '/src/images/icon.icns',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
