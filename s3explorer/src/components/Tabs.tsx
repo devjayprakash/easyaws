@@ -7,7 +7,7 @@ const Tabs: React.FC = () => {
 
   return (
     <div className="h-screen flex flex-col pt-8">
-      <div className="flex flex-shrink-0 border-b h-8 dark:border-gray-600 w-full items-center overflow-x-auto">
+      <div className="flex flex-shrink-0 border-b h-8 dark:border-gray-600 w-full items-center overflow-x-hidden">
         {tabs.map((tab, i) => (
           <div
             onClick={() => setActiveTab(tab.id)}

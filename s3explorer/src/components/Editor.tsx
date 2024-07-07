@@ -40,7 +40,6 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
         )}
         value={value}
         onChange={(value) => setValue(value)}
-        theme="vs-dark"
       />
     </div>
   );

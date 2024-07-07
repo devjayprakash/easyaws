@@ -144,8 +144,11 @@ const FolderContent: React.FC<{
                   >
                     <td className="p-2">
                       {content.type === 'file' ? (
-                        <div className="w-8 h-8">
-                          <FileIcon extension={content.name.split('.').pop()} />
+                        <div className="w-4 h-4">
+                          <FileIcon
+                            color="#c9e9ff"
+                            extension={content.name.split('.').pop()}
+                          />
                         </div>
                       ) : (
                         <img src={'/folder.png'} alt="folder icon" width={20} />
@@ -191,8 +194,11 @@ const FolderContent: React.FC<{
                 className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
               >
                 {content.type === 'file' ? (
-                  <div className="w-14 h-14 mb-5">
-                    <FileIcon extension={content.name.split('.').pop()} />
+                  <div className="w-[40px] h-10 mb-5">
+                    <FileIcon
+                      color="#c9e9ff"
+                      extension={content.name.split('.').pop()}
+                    />
                   </div>
                 ) : (
                   <img src={'/folder.png'} alt="folder icon" width={60} />
