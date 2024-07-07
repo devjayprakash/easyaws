@@ -1,6 +1,6 @@
 import { Editor } from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react';
-import { getLanguageFromExtension } from '../utils';
+import { extensionData } from '../utils';
 
 const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
   obj_key,
@@ -35,11 +35,13 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
   return (
     <div className="h-screen">
       <Editor
-        defaultLanguage={getLanguageFromExtension(
-          obj_key.split('.').pop() || ''
-        )}
+        defaultLanguage={
+          extensionData.find((d) => d.extension === obj_key.split('.').pop())
+            ?.name || 'plaintext'
+        }
         value={value}
         onChange={(value) => setValue(value)}
+        theme="vs-dark"
       />
     </div>
   );

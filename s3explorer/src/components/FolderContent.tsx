@@ -7,6 +7,7 @@ import {
   initialState,
 } from '../reducers/folderContent.reducer';
 import useTabs from '../store/tab-store';
+import { extensionData } from '../utils';
 import TextEditor from './Editor';
 import Toolbar from './Toolbar';
 
@@ -138,7 +139,7 @@ const FolderContent: React.FC<{
                           ),
                         };
                         addTab(tab);
-                        setActiveTab(tab);
+                        setActiveTab(tab.id);
                       }
                     }}
                   >
@@ -146,8 +147,10 @@ const FolderContent: React.FC<{
                       {content.type === 'file' ? (
                         <div className="w-4 h-4">
                           <FileIcon
-                            color="#c9e9ff"
-                            extension={content.name.split('.').pop()}
+                            {...(extensionData.find(
+                              (d) =>
+                                d.extension === content.name.split('.').pop()
+                            )?.style || {})}
                           />
                         </div>
                       ) : (
@@ -196,8 +199,9 @@ const FolderContent: React.FC<{
                 {content.type === 'file' ? (
                   <div className="w-[40px] h-10 mb-5">
                     <FileIcon
-                      color="#c9e9ff"
-                      extension={content.name.split('.').pop()}
+                      {...(extensionData.find(
+                        (d) => d.extension === content.name.split('.').pop()
+                      )?.style || {})}
                     />
                   </div>
                 ) : (

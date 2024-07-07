@@ -28,17 +28,18 @@ const useTabs = create<TabsStore>((set) => ({
   removeTab: (i) => {
     set((state) =>
       produce(state, (cpy) => {
+        if (cpy.tabs.length == 1) {
+          cpy.activeTabId = null;
+          cpy.tabs = [];
+          return;
+        }
+
         if (i == 0 && cpy.tabs.length > 1) {
           cpy.activeTabId = cpy.tabs[0].id;
         } else {
           cpy.activeTabId = cpy.tabs[i - 1].id;
         }
 
-        if (cpy.tabs.length === 1) {
-          cpy.activeTabId = null;
-          cpy.tabs = [];
-          return;
-        }
         cpy.tabs.splice(i, 1);
       })
     );
