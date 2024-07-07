@@ -45,6 +45,7 @@
     "@monaco-editor/react": "^4.6.0",
     "@tailwindcss/line-clamp": "^0.4.4",
     "electron-squirrel-startup": "^1.0.1",
+    "highlight.js": "^11.10.0",
     "lucide-react": "^0.400.0",
     "react-router-dom": "^6.24.1",
     "zustand": "^4.5.4"

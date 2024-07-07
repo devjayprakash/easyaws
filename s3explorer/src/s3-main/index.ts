@@ -17,8 +17,6 @@ export const getObjectsInsideABucket = async () => {
 
 export const startS3DataBridge = async () => {
   ipcMain.handle('save-object-content', async (_, key, value, bucket) => {
-    console.log(key, value, bucket);
-
     try {
       const result = await s3.send(
         new PutObjectCommand({
@@ -60,7 +58,6 @@ export const startS3DataBridge = async () => {
 
       return {
         value: text_data,
-        type: result.ContentType,
       };
     } catch (error) {
       console.error(error);
