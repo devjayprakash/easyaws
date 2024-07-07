@@ -1,12 +1,13 @@
 import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useReducer } from 'react';
 import {
+  ContentResult,
   folderContentReducer,
   initialState,
 } from '../reducers/folderContent.reducer';
-import { ContentResult } from '../store/global';
 import useTabs from '../store/tab-store';
 import TextEditor from './Editor';
+import Toolbar from './Toolbar';
 
 const FolderContent: React.FC<{
   active_bucket: string;
@@ -61,7 +62,7 @@ const FolderContent: React.FC<{
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="flex flex-wrap gap-1 p-2 items-center">
+      <div className="flex flex-wrap gap-1 px-5 py-2 items-center">
         <div
           onClick={() => {
             dispatch({
@@ -90,46 +91,120 @@ const FolderContent: React.FC<{
           </div>
         ))}
       </div>
-      <div className="gap-3 flex-wrap flex overflow-auto p-2">
-        {state.currentTree
-          .sort((a) => (a.type === 'folder' ? -1 : 1))
-          .map((content) => (
-            <div
-              key={content.name}
-              onClick={() => {
-                if (content.type === 'folder') {
-                  dispatch({
-                    type: 'ADD_PATH',
-                    payload: content.name,
-                  });
-                } else {
-                  const tab = {
-                    name: content.name,
-                    id: content.key,
-                    content: (
-                      <TextEditor
-                        bucket={active_bucket}
-                        obj_key={content.key}
+      <Toolbar
+        layout={state.layout}
+        setLayout={(layout) =>
+          dispatch({ type: 'SET_LAYOUT', payload: layout })
+        }
+        onSearch={(term) => {
+          dispatch({
+            type: 'SEARCH',
+            payload: term,
+          });
+        }}
+      />
+      {state.layout === 'list' && (
+        <div className="overflow-auto w-full">
+          <table className="m-6 table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
+            <thead>
+              <tr className="table-row">
+                <th></th>
+                <th className="text-start">Name</th>
+                <th className="text-start">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {state.currentTree
+                .sort((a) => (a.type === 'folder' ? -1 : 1))
+                .map((content) => (
+                  <tr
+                    className="table-row hover:bg-slate-700 cursor-pointer"
+                    onClick={() => {
+                      if (content.type === 'folder') {
+                        dispatch({
+                          type: 'ADD_PATH',
+                          payload: content.name,
+                        });
+                      } else {
+                        const tab = {
+                          name: content.name,
+                          id: content.key,
+                          content: (
+                            <TextEditor
+                              bucket={active_bucket}
+                              obj_key={content.key}
+                            />
+                          ),
+                        };
+                        addTab(tab);
+                        setActiveTab(tab);
+                      }
+                    }}
+                  >
+                    <td className="p-2">
+                      <img
+                        src={
+                          content.type === 'file'
+                            ? '/file_icon.png'
+                            : 'folder.png'
+                        }
+                        alt="folder icon"
+                        width={20}
                       />
-                    ),
-                  };
-                  addTab(tab);
-                  setActiveTab(tab);
-                }
-              }}
-              className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
-            >
-              <img
-                src={content.type === 'file' ? '/file_icon.png' : 'folder.png'}
-                alt="folder icon"
-                width={90}
-              />
-              <span className="w-[80px] text-xs text-center line-clamp-3">
-                {content.name}
-              </span>
-            </div>
-          ))}
-      </div>
+                    </td>
+                    <td className="table-cell">{content.name}</td>
+                    <td>{content.type}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {state.layout === 'grid' && (
+        <div className={`gap-3 flex-wrap flex overflow-auto p-2`}>
+          {state.currentTree
+            .sort((a) => (a.type === 'folder' ? -1 : 1))
+            .map((content) => (
+              <div
+                key={content.name}
+                onClick={() => {
+                  if (content.type === 'folder') {
+                    dispatch({
+                      type: 'ADD_PATH',
+                      payload: content.name,
+                    });
+                  } else {
+                    const tab = {
+                      name: content.name,
+                      id: content.key,
+                      content: (
+                        <TextEditor
+                          bucket={active_bucket}
+                          obj_key={content.key}
+                        />
+                      ),
+                    };
+                    addTab(tab);
+                    setActiveTab(tab);
+                  }
+                }}
+                className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
+              >
+                <img
+                  src={
+                    content.type === 'file' ? '/file_icon.png' : 'folder.png'
+                  }
+                  alt="folder icon"
+                  width={90}
+                />
+                <span className="w-[80px] text-xs text-center line-clamp-3">
+                  {content.name}
+                </span>
+              </div>
+            ))}
+        </div>
+      )}
     </div>
   );
 };

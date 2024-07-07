@@ -4,11 +4,13 @@ interface Content {
   key: string;
 }
 
-interface ContentResult {
+export interface ContentResult {
   Key: string;
   Size: number;
   LastModified: Date;
 }
+
+export type LayoutTypes = 'grid' | 'list';
 
 interface FolderContentReducerState {
   loading: boolean;
@@ -16,7 +18,7 @@ interface FolderContentReducerState {
   currentTree: Array<Content>;
   path_history: Array<string>;
   current_path: Array<string>;
-  layout: 'grid' | 'list';
+  layout: LayoutTypes;
 }
 
 const initialState: FolderContentReducerState = {
@@ -37,7 +39,8 @@ type FolderContentAction =
   | { type: 'SET_LAYOUT'; payload: 'grid' | 'list' }
   | { type: 'GO_BACK' }
   | { type: 'ADD_PATH'; payload: string }
-  | { type: 'GO_TO_ROOT' };
+  | { type: 'GO_TO_ROOT' }
+  | { type: 'SEARCH'; payload: string };
 
 function createTree(objects: Array<ContentResult>): Array<Content> {
   const tree: Array<Content> = [];
@@ -133,6 +136,13 @@ const folderContentReducer = (
         ...state,
         current_path: [],
         currentTree: state.tree,
+      };
+    case 'SEARCH':
+      return {
+        ...state,
+        currentTree: state.currentTree.filter((c) =>
+          c.name.includes(action.payload)
+        ),
       };
     default:
       return state;
