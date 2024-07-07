@@ -1,37 +1,58 @@
 import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
-import useGlobalStore, { ContentResult } from '../store/global';
+import React, { useEffect, useReducer } from 'react';
+import {
+  folderContentReducer,
+  initialState,
+} from '../reducers/folderContent.reducer';
+import { ContentResult } from '../store/global';
 import useTabs from '../store/tab-store';
 import TextEditor from './Editor';
 
 const FolderContent: React.FC<{
   active_bucket: string;
 }> = ({ active_bucket }) => {
-  const { currentTree, createTree, path, setCurrentTree, addPath, setPath } =
-    useGlobalStore();
   const { addTab, setActiveTab } = useTabs();
-
-  const [loading, setLoading] = useState(false);
+  const [state, dispatch] = useReducer(folderContentReducer, initialState);
 
   useEffect(() => {
-    setPath([]);
+    //mouse back click detect
+    const backFn = (e: MouseEvent) => {
+      if (e.button === 3) {
+        dispatch({
+          type: 'GO_BACK',
+        });
+      }
+    };
+    window.addEventListener('mousedown', backFn);
+
+    return () => {
+      window.removeEventListener('mousedown', backFn);
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchBucketContents = async () => {
       if (active_bucket) {
-        setLoading(true);
+        dispatch({
+          type: 'SET_LOADING',
+          payload: true,
+        });
         const contents_result: Array<ContentResult> =
           await window.s3_api.getBucketContents(active_bucket);
-        createTree(contents_result);
-        setLoading(false);
+        dispatch({
+          type: 'SET_TREE',
+          payload: contents_result,
+        });
+        dispatch({
+          type: 'SET_LOADING',
+          payload: false,
+        });
       }
     };
     fetchBucketContents();
   }, [active_bucket]);
 
-  useEffect(() => {
-    setCurrentTree(path);
-  }, [path, active_bucket, loading]);
-
-  if (loading)
+  if (state.loading)
     return (
       <div className="w-full h-full flex justify-center items-center text-xl text-gray-400">
         Loading...
@@ -43,18 +64,23 @@ const FolderContent: React.FC<{
       <div className="flex flex-wrap gap-1 p-2 items-center">
         <div
           onClick={() => {
-            setPath([]);
+            dispatch({
+              type: 'GO_TO_ROOT',
+            });
           }}
           className="p-2 flex gap-2 text-sm items-center max-w-[200px] dark:hover:bg-gray-900 rounded-md cursor-pointer"
         >
           <HomeIcon className="flex-shrink-0" size={16} />
           <div className="truncate">{active_bucket}</div>
         </div>
-        {path.map((p, i) => (
+        {state.current_path.map((p, i) => (
           <div
             key={`path-${i}`}
             onClick={() => {
-              setPath(path.slice(0, i + 1));
+              dispatch({
+                type: 'SET_CURRENT_PATH',
+                payload: state.current_path.slice(0, i + 1),
+              });
             }}
             className="flex gap-2 text-sm items-center cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 p-2 rounded-md duration-150"
           >
@@ -65,22 +91,25 @@ const FolderContent: React.FC<{
         ))}
       </div>
       <div className="gap-3 flex-wrap flex overflow-auto p-2">
-        {currentTree
-          ?.sort((a) => (a.type === 'folder' ? -1 : 1))
+        {state.currentTree
+          .sort((a) => (a.type === 'folder' ? -1 : 1))
           .map((content) => (
             <div
               key={content.name}
               onClick={() => {
                 if (content.type === 'folder') {
-                  addPath(content.name);
+                  dispatch({
+                    type: 'ADD_PATH',
+                    payload: content.name,
+                  });
                 } else {
                   const tab = {
                     name: content.name,
-                    id: content.real_key,
+                    id: content.key,
                     content: (
                       <TextEditor
                         bucket={active_bucket}
-                        obj_key={content.real_key}
+                        obj_key={content.key}
                       />
                     ),
                   };
