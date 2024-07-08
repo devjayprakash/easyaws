@@ -1,15 +1,24 @@
-import { FileIcon, Grid, List, Search } from 'lucide-react';
+import { Folder, Grid, List, Search } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { LayoutTypes } from '../reducers/folderContent.reducer';
+import { Button } from './ui/button';
+
+import CreateFileDialog from './CreateFileDialog';
 
 function Toolbar({
   onSearch,
   layout,
   setLayout,
+  bucket,
+  onFileCreate,
+  path,
 }: {
+  path: string;
   onSearch: (term: string) => void;
   layout: LayoutTypes;
   setLayout: (layout: LayoutTypes) => void;
+  bucket: string;
+  onFileCreate: (key: string) => void;
 }) {
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -34,10 +43,17 @@ function Toolbar({
         />
       </div>
       <div className="flex items-center gap-2">
-        <button className="flex dark:text-white text-sm items-center bg-slate-200 dark:bg-slate-900 px-3 py-1 text-slate-600 rounded-md cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-950 p-2">
-          <FileIcon size={24} className="p-1 " />
-        </button>
-        <button
+        <CreateFileDialog
+          bucket={bucket}
+          path={path}
+          onFileCreate={onFileCreate}
+        />
+        <Button variant="secondary" size="sm">
+          <Folder className="p-1" size={24} />
+        </Button>
+        <Button
+          variant="secondary"
+          size="sm"
           onClick={() => {
             setLayout(layout === 'grid' ? 'list' : 'grid');
           }}
@@ -48,7 +64,7 @@ function Toolbar({
           ) : (
             <Grid size={24} className="p-1 " />
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );

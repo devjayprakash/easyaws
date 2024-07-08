@@ -33,14 +33,8 @@ const useTabs = create<TabsStore>((set) => ({
           cpy.tabs = [];
           return;
         }
-
-        if (i == 0 && cpy.tabs.length > 1) {
-          cpy.activeTabId = cpy.tabs[0].id;
-        } else {
-          cpy.activeTabId = cpy.tabs[i - 1].id;
-        }
-
         cpy.tabs.splice(i, 1);
+        cpy.activeTabId = cpy.tabs[i]?.id;
       })
     );
   },

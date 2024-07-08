@@ -94,6 +94,14 @@ const FolderContent: React.FC<{
         ))}
       </div>
       <Toolbar
+        path={state.current_path.join('/')}
+        onFileCreate={(name) => {
+          dispatch({
+            type: 'ADD_FILE',
+            payload: name,
+          });
+        }}
+        bucket={active_bucket}
         layout={state.layout}
         setLayout={(layout) =>
           dispatch({ type: 'SET_LAYOUT', payload: layout })

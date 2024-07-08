@@ -40,7 +40,8 @@ type FolderContentAction =
   | { type: 'GO_BACK' }
   | { type: 'ADD_PATH'; payload: string }
   | { type: 'GO_TO_ROOT' }
-  | { type: 'SEARCH'; payload: string };
+  | { type: 'SEARCH'; payload: string }
+  | { type: 'ADD_FILE'; payload: string };
 
 function createTree(objects: Array<ContentResult>): Array<Content> {
   const tree: Array<Content> = [];
@@ -143,6 +144,18 @@ const folderContentReducer = (
         currentTree: state.currentTree.filter((c) =>
           c.name.includes(action.payload)
         ),
+      };
+    case 'ADD_FILE':
+      return {
+        ...state,
+        currentTree: [
+          ...state.currentTree,
+          {
+            name: action.payload,
+            type: 'file',
+            key: state.current_path.join('/') + '/' + action.payload,
+          },
+        ],
       };
     default:
       return state;

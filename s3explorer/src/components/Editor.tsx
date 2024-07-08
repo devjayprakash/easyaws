@@ -1,5 +1,6 @@
 import { Editor } from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react';
+import useSettingsStore from '../store/settings';
 import { extensionData } from '../utils';
 
 const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
@@ -7,6 +8,23 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
   bucket,
 }) => {
   const [value, setValue] = useState('');
+  const { editorTheme } = useSettingsStore();
+  const [theme, setTheme] = useState('vs-dark');
+
+  useEffect(() => {
+    if (editorTheme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
+        ? 'dark'
+        : 'light';
+      setTheme(systemTheme === 'dark' ? 'vs-dark' : 'vs-light');
+      return;
+    } else if (editorTheme === 'dark') {
+      setTheme('vs-dark');
+    } else {
+      setTheme('vs-light');
+    }
+  }, [editorTheme]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -41,7 +59,7 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
         }
         value={value}
         onChange={(value) => setValue(value)}
-        theme="vs-dark"
+        theme={theme}
       />
     </div>
   );

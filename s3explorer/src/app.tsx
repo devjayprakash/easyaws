@@ -1,5 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ThemeProvider } from './components/ThemeProvider';
+import { Toaster } from './components/ui/toaster';
 import HomePage from './pages/homepage';
 
 const router = createBrowserRouter([
@@ -11,12 +13,15 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <div className="dark:bg-gray-800 ">
-      <div className="w-full h-[30px] dark:bg-gray-900 z-50 fixed allow_drag flex justify-center items-center dark:text-white">
-        S3 Explorer
+    <ThemeProvider defaultTheme="dark" storageKey="theme-key">
+      <div className="dark:bg-gray-800 ">
+        <div className="w-full h-[30px] dark:bg-gray-900 z-50 fixed allow_drag flex justify-center items-center dark:text-white">
+          S3 Explorer
+        </div>
+        <RouterProvider router={router} />
+        <Toaster />
       </div>
-      <RouterProvider router={router} />
-    </div>
+    </ThemeProvider>
   );
 }
 
