@@ -6,6 +6,9 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { ipcMain } from 'electron';
+import { CLIENT_ID, CLIENT_SECRET } from '../temp';
+
+const region = 'us-east-1';
 
 const s3 = new S3Client();
 
@@ -16,6 +19,21 @@ export const getObjectsInsideABucket = async () => {
 };
 
 export const startS3DataBridge = async () => {
+  ipcMain.handle('get-presigned-url', async (_, key, bucket) => {
+    try {
+      const result = await s3.send(
+        new GetObjectCommand({
+          Bucket: bucket,
+          Key: key,
+        })
+      );
+
+      return result.Body.transformToString('base64');
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  });
   ipcMain.handle('save-object-content', async (_, key, value, bucket) => {
     try {
       const result = await s3.send(
@@ -25,7 +43,6 @@ export const startS3DataBridge = async () => {
           Body: value,
         })
       );
-      console.log(result);
 
       return result;
     } catch (error) {

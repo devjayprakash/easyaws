@@ -1,7 +1,8 @@
-interface Content {
+export interface Content {
   name: string;
   type: 'folder' | 'file';
   key: string;
+  listModified: Date;
 }
 
 export interface ContentResult {
@@ -61,6 +62,7 @@ function createTree(objects: Array<ContentResult>): Array<Content> {
           name: part,
           type: i === parts.length - 1 ? 'file' : 'folder',
           key: object.Key,
+          listModified: object.LastModified,
         };
         current.push(node);
         current = node.type === 'folder' ? (node.children = []) : [];
@@ -154,6 +156,7 @@ const folderContentReducer = (
             name: action.payload,
             type: 'file',
             key: state.current_path.join('/') + '/' + action.payload,
+            lastModified: new Date(),
           },
         ],
       };

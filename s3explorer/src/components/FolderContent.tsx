@@ -2,13 +2,15 @@ import { FolderArchiveIcon, HomeIcon } from 'lucide-react';
 import React, { useEffect, useReducer } from 'react';
 import { FileIcon } from 'react-file-icon';
 import {
+  Content,
   ContentResult,
   folderContentReducer,
   initialState,
 } from '../reducers/folderContent.reducer';
 import useTabs from '../store/tab-store';
-import { extensionData } from '../utils';
+import { extensionData, isImageFileByKey } from '../utils';
 import TextEditor from './Editor';
+import ImageViewer from './ImageViewer';
 import Toolbar from './Toolbar';
 
 const FolderContent: React.FC<{
@@ -54,6 +56,27 @@ const FolderContent: React.FC<{
     };
     fetchBucketContents();
   }, [active_bucket]);
+
+  const onFileOpen = (content: Content) => {
+    if (content.type === 'folder') {
+      dispatch({
+        type: 'ADD_PATH',
+        payload: content.name,
+      });
+    } else {
+      const tab = {
+        name: content.name,
+        id: content.key,
+        content: isImageFileByKey(content.key) ? (
+          <ImageViewer obj_key={content.key} bucket={active_bucket} />
+        ) : (
+          <TextEditor bucket={active_bucket} obj_key={content.key} />
+        ),
+      };
+      addTab(tab);
+      setActiveTab(tab.id);
+    }
+  };
 
   if (state.loading)
     return (
@@ -121,6 +144,7 @@ const FolderContent: React.FC<{
                 <th></th>
                 <th className="text-start">Name</th>
                 <th className="text-start">Type</th>
+                <th className="text-start">Last Modified</th>
               </tr>
             </thead>
             <tbody>
@@ -130,25 +154,7 @@ const FolderContent: React.FC<{
                   <tr
                     className="table-row dark:hover:bg-slate-700 hover:bg-slate-200 rounded-md cursor-pointer"
                     onClick={() => {
-                      if (content.type === 'folder') {
-                        dispatch({
-                          type: 'ADD_PATH',
-                          payload: content.name,
-                        });
-                      } else {
-                        const tab = {
-                          name: content.name,
-                          id: content.key,
-                          content: (
-                            <TextEditor
-                              bucket={active_bucket}
-                              obj_key={content.key}
-                            />
-                          ),
-                        };
-                        addTab(tab);
-                        setActiveTab(tab.id);
-                      }
+                      onFileOpen(content);
                     }}
                   >
                     <td className="p-2">
@@ -167,6 +173,7 @@ const FolderContent: React.FC<{
                     </td>
                     <td className="table-cell">{content.name}</td>
                     <td>{content.type}</td>
+                    <td>{content.listModified.toDateString()}</td>
                   </tr>
                 ))}
             </tbody>
@@ -182,25 +189,7 @@ const FolderContent: React.FC<{
               <div
                 key={content.name}
                 onClick={() => {
-                  if (content.type === 'folder') {
-                    dispatch({
-                      type: 'ADD_PATH',
-                      payload: content.name,
-                    });
-                  } else {
-                    const tab = {
-                      name: content.name,
-                      id: content.key,
-                      content: (
-                        <TextEditor
-                          bucket={active_bucket}
-                          obj_key={content.key}
-                        />
-                      ),
-                    };
-                    addTab(tab);
-                    setActiveTab(tab.id);
-                  }
+                  onFileOpen(content);
                 }}
                 className="p-3 rounded-md flex w-[90px] flex-col items-center justify-start  cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-900 duration-150"
               >

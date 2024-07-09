@@ -2,6 +2,7 @@ import { Editor } from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react';
 import useSettingsStore from '../store/settings';
 import { extensionData } from '../utils';
+import { useToast } from './ui/use-toast';
 
 const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
   obj_key,
@@ -10,6 +11,7 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
   const [value, setValue] = useState('');
   const { editorTheme } = useSettingsStore();
   const [theme, setTheme] = useState('vs-dark');
+  const { toast } = useToast();
 
   useEffect(() => {
     if (editorTheme === 'system') {
@@ -42,6 +44,10 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
     const handleSave = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 's') {
         window.s3_api.saveObjectContent(obj_key, value, bucket);
+        toast({
+          title: 'Saved',
+          description: 'File saved successfully',
+        });
       }
     };
     window.addEventListener('keydown', handleSave);

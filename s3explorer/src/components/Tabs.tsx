@@ -31,7 +31,7 @@ const Tabs: React.FC = () => {
             }}
             onClick={() => setActiveTab(tab.id)}
             key={tab.name}
-            className={`px-3 py-1 flex-shrink-0 flex gap-2 items-center cursor-pointer text-sm border-t-[2px] border-r dark:border-gray-600 ${
+            className={`px-3 max-w-[220px] truncate py-1 flex-shrink-0 flex gap-2 items-center cursor-pointer text-sm border-t-[2px] border-r dark:border-gray-600 ${
               tab.id === activeTabId
                 ? 'dark:text-white border-t-sky-400'
                 : 'dark:bg-gray-950 dark:text-gray-400'
@@ -48,7 +48,15 @@ const Tabs: React.FC = () => {
           </div>
         ))}
       </div>
-      {activeTabId && tabs.find((tab) => tab.id === activeTabId)?.content}
+      {tabs.map((tab) => (
+        <div
+          hidden={tab.id !== activeTabId}
+          key={tab.id}
+          className="w-full h-full"
+        >
+          {tab.content}
+        </div>
+      ))}
     </div>
   );
 };

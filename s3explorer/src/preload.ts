@@ -3,6 +3,16 @@ import { contextBridge, ipcRenderer } from 'electron';
 const cache: { [e: string]: any } = {};
 
 contextBridge.exposeInMainWorld('s3_api', {
+  getPresignedUrl: async (key: string, bucket: string) => {
+    if (cache[key]) {
+      return cache[key];
+    }
+
+    const result = await ipcRenderer.invoke('get-presigned-url', key, bucket);
+    cache[key] = result;
+
+    return result;
+  },
   saveObjectContent: async (key: string, value: string, bucket: string) => {
     try {
       console.log({ key, value, bucket });

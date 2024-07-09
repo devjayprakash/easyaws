@@ -267,3 +267,8 @@ export const extensionData = [
     name: 'rar',
   },
 ];
+
+export const isImageFileByKey = (key: string) => {
+  const ext = key.split('.').pop();
+  return ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(ext);
+};
