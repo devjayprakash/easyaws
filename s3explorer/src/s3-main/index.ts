@@ -6,7 +6,6 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { ipcMain } from 'electron';
-import { CLIENT_ID, CLIENT_SECRET } from '../temp';
 
 const region = 'us-east-1';
 

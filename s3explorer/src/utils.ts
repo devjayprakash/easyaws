@@ -272,3 +272,12 @@ export const isImageFileByKey = (key: string) => {
   const ext = key.split('.').pop();
   return ['jpg', 'jpeg', 'png', 'gif', 'svg'].includes(ext);
 };
+
+export const getFileIconStyle = (key: string) => {
+  const ext = key.split('.').pop();
+  return extensionData.find((d) => d.extension === ext)?.style || {};
+}
+
+export const getExtension = (key : string) => {
+  return key.split('.').pop(); 
+}

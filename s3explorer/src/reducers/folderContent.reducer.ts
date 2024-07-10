@@ -13,7 +13,7 @@ export interface ContentResult {
 
 export type LayoutTypes = 'grid' | 'list';
 
-interface FolderContentReducerState {
+export interface FolderContentReducerState {
   loading: boolean;
   tree: Array<Content>;
   currentTree: Array<Content>;
@@ -31,7 +31,7 @@ const initialState: FolderContentReducerState = {
   layout: 'grid',
 };
 
-type FolderContentAction =
+export type FolderContentAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_TREE'; payload: Array<ContentResult> }
   | { type: 'SET_CURRENT_TREE'; payload: string }

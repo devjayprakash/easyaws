@@ -21,5 +21,5 @@ storage.
 
 ## Action plan
 
-- [ ] Create coming soon site
-- [ ] Initial repo setup for application
+-   [ ] Create coming soon site
+-   [ ] Initial repo setup for application
