@@ -82,7 +82,7 @@ function Sidebar() {
                         true
                     )
                 }}
-                className="flex hover:dark:bg-slate-700 dark:bg-slate-950 dark:text-slate-400 m-2 p-2 gap-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400"
+                className="flex text-black hover:dark:bg-slate-700 dark:bg-slate-950 dark:text-slate-400 m-2 p-2 gap-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400"
             >
                 <Settings /> <span>Settings</span>
             </Button>

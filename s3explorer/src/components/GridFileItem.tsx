@@ -2,8 +2,10 @@ import { Delete, Download } from 'lucide-react'
 import React from 'react'
 import { FileIcon } from 'react-file-icon'
 import useFile from '../hooks/useFile'
+import folderIcon from '../images/folder.png'
 import { Content, FolderContentAction } from '../reducers/folderContent.reducer'
 import { getFileIconStyle } from '../utils'
+
 import {
     ContextMenu,
     ContextMenuContent,
@@ -34,7 +36,7 @@ function GridFileItem({
                             <FileIcon {...getFileIconStyle(content.key)} />
                         </div>
                     ) : (
-                        <img src={'/folder.png'} alt="folder icon" width={60} />
+                        <img src={folderIcon} alt="folder icon" width={60} />
                     )}
                     <span className="w-[80px] text-xs text-center line-clamp-3">
                         {content.name}

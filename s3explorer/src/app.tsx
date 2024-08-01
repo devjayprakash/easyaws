@@ -1,10 +1,10 @@
 import React from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createHashRouter, RouterProvider } from 'react-router-dom'
 import { ThemeProvider } from './components/ThemeProvider'
 import { Toaster } from './components/ui/toaster'
 import HomePage from './pages/homepage'
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: '/',
         element: <HomePage />,
