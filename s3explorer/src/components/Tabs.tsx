@@ -1,6 +1,11 @@
-import { File, Folder, Settings, XIcon } from 'lucide-react'
+import { File, Folder, XIcon, Settings } from 'lucide-react'
 import React, { useEffect } from 'react'
-import useTabs from '../store/tab-store'
+import useTabs, { Tab } from '../store/tab-store'
+import FolderContent from './FolderContent'
+import { isImageFileByKey } from '../utils'
+import ImageViewer from './ImageViewer'
+import TextEditor from './Editor'
+import SettingsPage from './Settings'
 
 const Tabs: React.FC = () => {
     const { tabs, removeTab, setActiveTab, activeTabId } = useTabs()
@@ -18,6 +23,26 @@ const Tabs: React.FC = () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
     }, [])
+
+    const getContent = (tab: Tab) => {
+        switch (tab.type) {
+            case 'file':
+                if (isImageFileByKey(tab.id)) {
+                    return (
+                        <ImageViewer bucket={tab.bucket_id} obj_key={tab.id} />
+                    )
+                } else {
+                    return (
+                        <TextEditor bucket={tab.bucket_id} obj_key={tab.id} />
+                    )
+                }
+                return null
+            case 'settings':
+                return <SettingsPage />
+            case 'folder':
+                return <FolderContent active_bucket={tab.id} />
+        }
+    }
 
     return (
         <div className="h-screen flex flex-col pt-8">
@@ -61,13 +86,14 @@ const Tabs: React.FC = () => {
                     </div>
                 ))}
             </div>
+
             {tabs.map((tab) => (
                 <div
                     hidden={tab.id !== activeTabId}
                     key={tab.id}
                     className="w-full h-full"
                 >
-                    {tab.content}
+                    {getContent(tab)}
                 </div>
             ))}
         </div>

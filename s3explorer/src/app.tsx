@@ -1,13 +1,24 @@
 import React from 'react'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
+import RoutingComp from './components/RoutingComp'
 import { ThemeProvider } from './components/ThemeProvider'
 import { Toaster } from './components/ui/toaster'
+import AmazonCredPage from './pages/accounts'
 import HomePage from './pages/homepage'
 
 const router = createHashRouter([
     {
-        path: '/',
-        element: <HomePage />,
+        element: <RoutingComp />,
+        children: [
+            {
+                path: '/',
+                element: <HomePage />,
+            },
+            {
+                path: '/accounts',
+                element: <AmazonCredPage />,
+            },
+        ],
     },
 ])
 

@@ -1,6 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
-import { startS3DataBridge } from './s3-main'
+import './handlers'
 
 if (require('electron-squirrel-startup')) {
     app.quit()
@@ -45,5 +45,3 @@ app.on('activate', () => {
         createWindow()
     }
 })
-
-startS3DataBridge()

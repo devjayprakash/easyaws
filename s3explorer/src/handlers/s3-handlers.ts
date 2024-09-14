@@ -5,9 +5,37 @@ import {
     PutObjectCommand,
     S3Client,
 } from '@aws-sdk/client-s3'
+import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
 import { ipcMain } from 'electron'
+import { ACCESS_KEY, SECRET_KEY } from '../creds'
 
-const s3 = new S3Client()
+let s3 = new S3Client({
+    region: 'us-east-1',
+    credentials: {
+        accessKeyId: ACCESS_KEY,
+        secretAccessKey: SECRET_KEY,
+    },
+})
+
+export const setCredentials = (
+    _: Electron.IpcMainInvokeEvent,
+    access_key: string,
+    secret_key: string,
+    region: string
+) => {
+    console.log('created new s3 client')
+    s3.destroy()
+
+    s3 = new S3Client({
+        region: 'us-east-1',
+        credentials: {
+            accessKeyId: ACCESS_KEY,
+            secretAccessKey: SECRET_KEY,
+        },
+    })
+
+    return true
+}
 
 export const getBuckets = async () => {
     const getBuckets = new ListBucketsCommand()
@@ -109,10 +137,56 @@ export const getPresignedUrl = async (
     }
 }
 
-export const startS3DataBridge = async () => {
+export const validateCredentials = async (
+    _: Electron.IpcMainInvokeEvent,
+    access_key: string,
+    secret_key: string,
+    region: string
+) => {
+    const sts_client = new STSClient({
+        region: region,
+        credentials: {
+            accessKeyId: access_key,
+            secretAccessKey: secret_key,
+        },
+    })
+
+    try {
+        await sts_client.send(new GetCallerIdentityCommand({}))
+        return true
+    } catch (error) {
+        console.error(error)
+        return false
+    }
+}
+
+const changeS3Client = async (
+    _: Electron.IpcMainInvokeEvent,
+    access_key: string,
+    secret_key: string,
+    region: string
+) => {
+    s3.destroy()
+    s3 = new S3Client({
+        region,
+        credentials: {
+            accessKeyId: access_key,
+            secretAccessKey: secret_key,
+        },
+    })
+
+    return true
+}
+
+const startS3Handlers = async () => {
     ipcMain.handle('get-presigned-url', getPresignedUrl)
     ipcMain.handle('save-object-content', saveObjectContent)
     ipcMain.handle('get-object-content', getObjectContent)
     ipcMain.handle('get-buckets', getBuckets)
     ipcMain.handle('get-objects', getObjectsInsideABucket)
+    ipcMain.handle('set-credentials', setCredentials)
+    ipcMain.handle('validate-credentials', validateCredentials)
+    ipcMain.handle('change-s3-account', changeS3Client)
 }
+
+export default startS3Handlers

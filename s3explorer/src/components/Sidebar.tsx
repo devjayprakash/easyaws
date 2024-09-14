@@ -1,8 +1,6 @@
 import { FolderDotIcon, SearchIcon, Settings, XCircle } from 'lucide-react'
 import React, { useEffect } from 'react'
 import useTabs from '../store/tab-store'
-import FolderContent from './FolderContent'
-import SettingsPage from './Settings'
 import { Button } from './ui/button'
 
 function Sidebar() {
@@ -50,11 +48,6 @@ function Sidebar() {
                                     {
                                         name: bucket,
                                         id: bucket,
-                                        content: (
-                                            <FolderContent
-                                                active_bucket={bucket}
-                                            />
-                                        ),
                                         type: 'folder',
                                     },
                                     true
@@ -76,7 +69,6 @@ function Sidebar() {
                         {
                             name: 'Settings',
                             id: 'settings',
-                            content: <SettingsPage />,
                             type: 'settings',
                         },
                         true

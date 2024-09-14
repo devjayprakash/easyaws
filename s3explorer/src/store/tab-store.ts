@@ -1,11 +1,13 @@
 import { produce } from 'immer'
 import { create } from 'zustand'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import storage from './store-storage'
 
-interface Tab {
+export interface Tab {
     id: string
     name: string
-    content: React.ReactNode
     type?: 'folder' | 'file' | 'settings'
+    bucket_id?: string
 }
 
 interface TabsStore {
@@ -16,40 +18,56 @@ interface TabsStore {
     setActiveTab: (tab_id: string) => void
 }
 
-const useTabs = create<TabsStore>((set) => ({
-    tabs: [],
-    activeTabId: null,
-    addTab: (tab, set_active) =>
-        set((state) => {
-            if (state.tabs.some((t) => t.id === tab.id)) {
-                return { activeTabId: tab.id }
-            }
-            const new_state: Partial<TabsStore> = { tabs: [...state.tabs, tab] }
+const useTabs = create(
+    persist<TabsStore>(
+        (set) => ({
+            tabs: [],
+            activeTabId: null,
+            addTab: (tab, set_active) =>
+                set((state) => {
+                    // if the tab already exists make it active
+                    const existing_tab = state.tabs.find((t) => t.id === tab.id)
+                    console.log(tab)
 
-            if (set_active) {
-                new_state.activeTabId = tab.id
-            }
+                    if (existing_tab) {
+                        return { activeTabId: tab.id }
+                    }
+                    // if the tab does not exits add it
+                    const new_state: Partial<TabsStore> = {
+                        tabs: [...state.tabs, tab],
+                    }
 
-            return new_state
+                    // if set_active is true make the tab active
+                    if (set_active) {
+                        new_state.activeTabId = tab.id
+                    }
+
+                    return new_state
+                }),
+            removeTab: (i) => {
+                set((state) =>
+                    produce(state, (cpy) => {
+                        if (cpy.tabs.length == 1) {
+                            cpy.activeTabId = null
+                            cpy.tabs = []
+                            return
+                        }
+                        cpy.tabs.splice(i, 1)
+                        cpy.activeTabId = cpy.tabs[i - 1]?.id
+                    })
+                )
+            },
+            setActiveTab(tab_id) {
+                set(() => {
+                    return { activeTabId: tab_id }
+                })
+            },
         }),
-    removeTab: (i) => {
-        set((state) =>
-            produce(state, (cpy) => {
-                if (cpy.tabs.length == 1) {
-                    cpy.activeTabId = null
-                    cpy.tabs = []
-                    return
-                }
-                cpy.tabs.splice(i, 1)
-                cpy.activeTabId = cpy.tabs[i - 1]?.id
-            })
-        )
-    },
-    setActiveTab(tab_id) {
-        set(() => {
-            return { activeTabId: tab_id }
-        })
-    },
-}))
+        {
+            name: 'tabs-store',
+            storage: createJSONStorage(() => storage),
+        }
+    )
+)
 
 export default useTabs
