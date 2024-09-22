@@ -10,6 +10,7 @@ const createWindow = () => {
     const mainWindow = new BrowserWindow({
         width: 1080,
         height: 720,
+        title : 'S3 Explorer',
         titleBarStyle: 'hiddenInset',
         frame: false,
         icon: '/src/images/icon.icns',

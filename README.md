@@ -1,6 +1,6 @@
 # Easy AWS
 
-![Screenshot image of application](./s3explorer/public/screenshot.png 'a title')
+![Screenshot image of application](./screenshots/preview.png 'a title')
 
 Easy aws is a simple tool to explore your aws buckets like simple
 storage.
