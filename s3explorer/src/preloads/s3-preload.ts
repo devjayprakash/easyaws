@@ -83,7 +83,7 @@ const preload_scripts_s3 = {
         secretAccessKey: string,
         region: string
     ) => {
-        await ipcRenderer.send(
+        await ipcRenderer.invoke(
             'set-credentials',
             accessKeyId,
             secretAccessKey,

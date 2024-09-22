@@ -3,19 +3,12 @@ import {
     ListBucketsCommand,
     ListObjectsV2Command,
     PutObjectCommand,
-    S3Client,
 } from '@aws-sdk/client-s3'
 import { GetCallerIdentityCommand, STSClient } from '@aws-sdk/client-sts'
 import { ipcMain } from 'electron'
-import { ACCESS_KEY, SECRET_KEY } from '../creds'
+import S3Provider from '../libs/S3Provider'
 
-let s3 = new S3Client({
-    region: 'us-east-1',
-    credentials: {
-        accessKeyId: ACCESS_KEY,
-        secretAccessKey: SECRET_KEY,
-    },
-})
+const s3Provider = new S3Provider()
 
 export const setCredentials = (
     _: Electron.IpcMainInvokeEvent,
@@ -23,21 +16,12 @@ export const setCredentials = (
     secret_key: string,
     region: string
 ) => {
-    console.log('created new s3 client')
-    s3.destroy()
-
-    s3 = new S3Client({
-        region: 'us-east-1',
-        credentials: {
-            accessKeyId: ACCESS_KEY,
-            secretAccessKey: SECRET_KEY,
-        },
-    })
-
+    s3Provider.setS3Client(access_key, secret_key, region)
     return true
 }
 
 export const getBuckets = async () => {
+    const s3 = s3Provider.getS3Client()
     const getBuckets = new ListBucketsCommand()
     const result = await s3.send(getBuckets)
     return result.Buckets
@@ -47,6 +31,7 @@ export const getObjectsInsideABucket = async (
     _: Electron.IpcMainInvokeEvent,
     bucket: string
 ) => {
+    const s3 = s3Provider.getS3Client()
     const result = await s3.send(
         new ListObjectsV2Command({
             Bucket: bucket,
@@ -65,6 +50,7 @@ export const getObjectContent = async (
     key: string,
     bucket: string
 ) => {
+    const s3 = s3Provider.getS3Client()
     const allowed_types = [
         'text/plain',
         'application/json',
@@ -102,6 +88,7 @@ export const saveObjectContent = async (
     bucket: string
 ) => {
     try {
+        const s3 = s3Provider.getS3Client()
         const result = await s3.send(
             new PutObjectCommand({
                 Bucket: bucket,
@@ -123,6 +110,7 @@ export const getPresignedUrl = async (
     bucket: string
 ) => {
     try {
+        const s3 = s3Provider.getS3Client()
         const result = await s3.send(
             new GetObjectCommand({
                 Bucket: bucket,
@@ -160,24 +148,6 @@ export const validateCredentials = async (
     }
 }
 
-const changeS3Client = async (
-    _: Electron.IpcMainInvokeEvent,
-    access_key: string,
-    secret_key: string,
-    region: string
-) => {
-    s3.destroy()
-    s3 = new S3Client({
-        region,
-        credentials: {
-            accessKeyId: access_key,
-            secretAccessKey: secret_key,
-        },
-    })
-
-    return true
-}
-
 const startS3Handlers = async () => {
     ipcMain.handle('get-presigned-url', getPresignedUrl)
     ipcMain.handle('save-object-content', saveObjectContent)
@@ -186,7 +156,6 @@ const startS3Handlers = async () => {
     ipcMain.handle('get-objects', getObjectsInsideABucket)
     ipcMain.handle('set-credentials', setCredentials)
     ipcMain.handle('validate-credentials', validateCredentials)
-    ipcMain.handle('change-s3-account', changeS3Client)
 }
 
 export default startS3Handlers
