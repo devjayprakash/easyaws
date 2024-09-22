@@ -2,6 +2,7 @@ import { FolderDotIcon, SearchIcon, Settings, XCircle } from 'lucide-react'
 import React, { useEffect } from 'react'
 import useTabs from '../store/tab-store'
 import { Button } from './ui/button'
+import mixpanel from 'mixpanel-browser'
 
 function Sidebar() {
     const [buckets, setBuckets] = React.useState<Array<string>>([])
@@ -11,6 +12,9 @@ function Sidebar() {
 
     useEffect(() => {
         const getBucketData = async () => {
+            mixpanel.track('get_buckets', {
+                event: 'get_buckets',
+            })
             const result = await window.s3_api.getBuckets()
             setBuckets(result.map((r) => r.Name))
         }
@@ -44,6 +48,10 @@ function Sidebar() {
                         <div
                             key={bucket}
                             onClick={() => {
+                                mixpanel.track('clicked_on_bucket', {
+                                    event: 'open_bucket',
+                                    bucket,
+                                })
                                 addTab(
                                     {
                                         name: bucket,
@@ -65,6 +73,7 @@ function Sidebar() {
             </div>
             <Button
                 onClick={() => {
+                    mixpanel.track('clicked_on_settings')
                     addTab(
                         {
                             name: 'Settings',

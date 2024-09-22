@@ -3,6 +3,7 @@ import useSettingsStore from '../store/settings'
 import { ModeToggle } from './ModeToggle'
 import { useTheme } from './ThemeProvider'
 import { Card } from './ui/card'
+import mixpanel from 'mixpanel-browser'
 
 function SettingsPage() {
     const { setEditorTheme } = useSettingsStore()
@@ -22,9 +23,12 @@ function SettingsPage() {
                     </div>
                     <div>
                         <ModeToggle
-                            onChange={(theme: 'dark' | 'light') =>
+                            onChange={(theme: 'dark' | 'light') => {
+                                mixpanel.track('app_theme_changed', {
+                                    theme,
+                                })
                                 setTheme(theme)
-                            }
+                            }}
                         />
                     </div>
                 </div>
@@ -41,6 +45,9 @@ function SettingsPage() {
                     <div>
                         <ModeToggle
                             onChange={(theme) => {
+                                mixpanel.track('editor_theme_changed', {
+                                    theme,
+                                })
                                 setEditorTheme(theme)
                             }}
                         />

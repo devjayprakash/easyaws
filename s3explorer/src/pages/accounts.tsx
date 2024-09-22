@@ -18,6 +18,7 @@ import { Input } from '../components/ui/input'
 import { useToast } from '../components/ui/use-toast'
 import rocketImage from '../images/rocket.png'
 import useAccountsStore from '../store/accounts-store'
+import mixpanel from 'mixpanel-browser'
 
 const FormValues = z.object({
     key_name: z
@@ -59,8 +60,6 @@ function AmazonCredPage() {
             info.region
         )
 
-        console.log(validate)
-
         if (validate) {
             addAccount(
                 {
@@ -71,10 +70,12 @@ function AmazonCredPage() {
                 },
                 true
             )
+            mixpanel.track('account_added')
             nav('/', {
                 replace: true,
             })
         } else {
+            mixpanel.track('invlaid_credentials')
             toast({
                 title: 'Invalid credentials',
                 description:

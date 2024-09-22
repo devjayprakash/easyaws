@@ -7,6 +7,7 @@ import Breadcrumb from './Breadcrumb'
 import GridFileItem from './GridFileItem'
 import ListFileItem from './ListFileItem'
 import Toolbar from './Toolbar'
+import mixpanel from 'mixpanel-browser'
 
 const FolderContent: React.FC<{
     active_bucket: string
@@ -53,6 +54,10 @@ const FolderContent: React.FC<{
             <Toolbar
                 path={state.current_path.join('/')}
                 onFileCreate={(name) => {
+                    mixpanel.track('file_created', {
+                        event: 'file_created',
+                        name,
+                    })
                     dispatch({
                         type: 'ADD_FILE',
                         payload: name,
@@ -60,10 +65,18 @@ const FolderContent: React.FC<{
                 }}
                 bucket={active_bucket}
                 layout={state.layout}
-                setLayout={(layout) =>
+                setLayout={(layout) => {
+                    mixpanel.track('layout_changed', {
+                        event: 'layout_changed',
+                        layout,
+                    })
                     dispatch({ type: 'SET_LAYOUT', payload: layout })
-                }
+                }}
                 onSearch={(term) => {
+                    mixpanel.track('searched file', {
+                        event: 'searched_file',
+                        term,
+                    })
                     dispatch({
                         type: 'SEARCH',
                         payload: term,

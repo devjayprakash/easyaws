@@ -6,6 +6,17 @@ import { Toaster } from './components/ui/toaster'
 import AmazonCredPage from './pages/accounts'
 import HomePage from './pages/homepage'
 
+import mixpanel from 'mixpanel-browser'
+import ErrorBoundary from './components/ErrorBoundry'
+
+const MIXPANEL_TOKEN = 'token_here'
+
+mixpanel.init(MIXPANEL_TOKEN, {
+    debug: process.env.NODE_ENV === 'development',
+    track_pageview: true,
+    persistence: 'localStorage',
+})
+
 const router = createHashRouter([
     {
         element: <RoutingComp />,
@@ -13,10 +24,12 @@ const router = createHashRouter([
             {
                 path: '/',
                 element: <HomePage />,
+                errorElement: <ErrorBoundary />,
             },
             {
                 path: '/accounts',
                 element: <AmazonCredPage />,
+                errorElement: <ErrorBoundary />,
             },
         ],
     },

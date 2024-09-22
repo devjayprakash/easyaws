@@ -4,6 +4,7 @@ import { LayoutTypes } from '../reducers/folderContent.reducer'
 import { Button } from './ui/button'
 
 import CreateFileDialog from './CreateFileDialog'
+import mixpanel from 'mixpanel-browser'
 
 function Toolbar({
     onSearch,
@@ -52,6 +53,10 @@ function Toolbar({
                     variant="secondary"
                     size="sm"
                     onClick={() => {
+                        mixpanel.track('layout_changed', {
+                            event: 'layout_changed',
+                            layout,
+                        })
                         setLayout(layout === 'grid' ? 'list' : 'grid')
                     }}
                     className="flex dark:text-white  text-sm items-center bg-slate-200 dark:bg-slate-900 px-3 py-1 text-slate-600 rounded-md cursor-pointer hover:bg-slate-300 dark:hover:bg-slate-950 p-2"
