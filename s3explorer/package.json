@@ -1,7 +1,7 @@
 {
     "name": "s3explorer",
     "productName": "s3explorer",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "S3 Explorer",
     "main": ".vite/build/main.js",
     "scripts": {
@@ -20,6 +20,7 @@
         "@electron-forge/plugin-auto-unpack-natives": "^7.4.0",
         "@electron-forge/plugin-fuses": "^7.4.0",
         "@electron-forge/plugin-vite": "^7.4.0",
+        "@electron-forge/publisher-github": "^7.5.0",
         "@electron-forge/publisher-s3": "^7.4.0",
         "@electron/fuses": "^1.8.0",
         "@types/mixpanel-browser": "^2.50.0",
@@ -79,8 +80,13 @@
         "strip-indent": "^4.0.0",
         "tailwind-merge": "^2.4.0",
         "tailwindcss-animate": "^1.0.7",
+        "update-electron-app": "^3.0.0",
         "uuid": "^10.0.0",
         "zod": "^3.23.8",
         "zustand": "^4.5.4"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/devjayprakash/easyaws"
     }
 }

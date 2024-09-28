@@ -2,6 +2,10 @@ import { app, BrowserWindow } from 'electron'
 import path from 'path'
 import './handlers'
 
+import update from 'update-electron-app'
+
+update.updateElectronApp()
+
 if (require('electron-squirrel-startup')) {
     app.quit()
 }

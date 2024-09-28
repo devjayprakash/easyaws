@@ -45,7 +45,7 @@ const FolderContent: React.FC<{
         )
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col flex-grow overflow-auto">
             <Breadcrumb
                 dispatch={dispatch}
                 bucket={active_bucket}
@@ -85,8 +85,8 @@ const FolderContent: React.FC<{
             />
 
             {state.layout === 'list' && (
-                <div className="overflow-auto h-[74vh] w-full mt-6 mx-3">
-                    <table className="mx-6 table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
+                <div className="overflow-auto mt-6 flex-grow mx-6">
+                    <table className="table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
                         <thead>
                             <tr className="table-row">
                                 <th></th>
@@ -111,8 +111,8 @@ const FolderContent: React.FC<{
                 </div>
             )}
             {state.layout === 'grid' && (
-                <div className={`flex-grow h-[80vh] overflow-auto`}>
-                    <div className="flex flex-wrap gap-3">
+                <div className={`px-6 flex-grow overflow-scroll`}>
+                    <div className="flex flex-wrap gap-3 ">
                         {state.currentTree
                             .sort((a) => (a.type === 'folder' ? -1 : 1))
                             .map((content) => (

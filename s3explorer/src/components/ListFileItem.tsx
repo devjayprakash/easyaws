@@ -3,6 +3,7 @@ import { FileIcon } from 'react-file-icon'
 import useFile from '../hooks/useFile'
 import { Content, FolderContentAction } from '../reducers/folderContent.reducer'
 import { getFileIconStyle } from '../utils'
+import folderIcon from '../images/folder.png'
 
 function ListFileItem({
     content,
@@ -28,14 +29,13 @@ function ListFileItem({
                         <FileIcon {...getFileIconStyle(content.key)} />
                     </div>
                 ) : (
-                    <img
-                        src={require('../images/folder.png')}
-                        alt="folder icon"
-                        width={20}
-                    />
+                    <img src={folderIcon} alt="folder icon" width={20} />
                 )}
             </td>
-            <td className="table-cell">{content.name}</td>
+            <td>
+                {content.name.slice(0, 30)}
+                {content.name.length > 30 && '...'}
+            </td>
             <td>{content.type}</td>
             <td>{content.listModified.toDateString()}</td>
         </tr>

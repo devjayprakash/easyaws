@@ -1,5 +1,5 @@
-import { File, Folder, XIcon, Settings } from 'lucide-react'
-import React, { useEffect } from 'react'
+import { File, Folder, XIcon, Settings, FolderArchiveIcon } from 'lucide-react'
+import React, { useEffect, useMemo } from 'react'
 import useTabs, { Tab } from '../store/tab-store'
 import FolderContent from './FolderContent'
 import { isImageFileByKey } from '../utils'
@@ -9,6 +9,11 @@ import SettingsPage from './Settings'
 
 const Tabs: React.FC = () => {
     const { tabs, removeTab, setActiveTab, activeTabId } = useTabs()
+
+    const active_tab = useMemo(
+        () => tabs.find((tab) => tab.id === activeTabId),
+        [activeTabId, tabs]
+    )
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -25,6 +30,20 @@ const Tabs: React.FC = () => {
     }, [])
 
     const getContent = (tab: Tab) => {
+        if (!tab) {
+            return (
+                <div className="w-full h-full flex flex-col justify-center items-center text-gray-400 gap-5">
+                    <div>
+                        <FolderArchiveIcon size={98} />
+                    </div>
+                    <div className="text-2xl font-thin max-w-md text-center">
+                        No buckets selected. Select a bucket from the sidebar to
+                        get started
+                    </div>
+                </div>
+            )
+        }
+
         switch (tab.type) {
             case 'file':
                 if (isImageFileByKey(tab.id)) {
@@ -45,8 +64,8 @@ const Tabs: React.FC = () => {
     }
 
     return (
-        <div className="h-screen flex flex-col pt-8">
-            <div className="flex flex-shrink-0 border-b h-8 dark:border-gray-600 w-full items-center overflow-x-hidden">
+        <div className="h-screen flex flex-col pt-8 overflow-hidden">
+            <div className="border-b flex dark:border-gray-600">
                 {tabs.map((tab, i) => (
                     <div
                         onMouseDown={(e) => {
@@ -86,16 +105,9 @@ const Tabs: React.FC = () => {
                     </div>
                 ))}
             </div>
-
-            {tabs.map((tab) => (
-                <div
-                    hidden={tab.id !== activeTabId}
-                    key={tab.id}
-                    className="w-full h-full"
-                >
-                    {getContent(tab)}
-                </div>
-            ))}
+            <div className="w-full h-full flex flex-col overflow-hidden">
+                {getContent(active_tab)}
+            </div>
         </div>
     )
 }

@@ -32,6 +32,9 @@ const ErrorBoundary: React.FC = () => {
             >
                 Report this error
             </Button>
+            <div>
+                <pre>{JSON.stringify(error, null, 2)}</pre>
+            </div>
         </div>
     )
 }
