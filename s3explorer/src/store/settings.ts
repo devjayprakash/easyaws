@@ -7,6 +7,7 @@ interface SettingsState {
     setEditorTheme: (theme: 'dark' | 'light' | 'system') => void
     accentColor: string
     setAccentColor: (color: string) => void
+    reset: () => void
 }
 
 const useSettingsStore = create(
@@ -16,6 +17,7 @@ const useSettingsStore = create(
             setEditorTheme: (theme) => set({ editorTheme: theme }),
             accentColor: '#2563EB',
             setAccentColor: (color) => set({ accentColor: color }),
+            reset: () => set({ editorTheme: 'system', accentColor: '#2563EB' }),
         }),
         {
             name: 'settings-store',

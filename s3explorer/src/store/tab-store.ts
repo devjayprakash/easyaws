@@ -6,9 +6,9 @@ import storage from './store-storage'
 export interface Tab {
     id: string
     name: string
-    type?: 'folder' | 'file' | 'settings'
+    type?: 'folder' | 'file' | 'settings' | 'developer'
     bucket_id?: string
-    saved : boolean 
+    saved: boolean
 }
 
 interface TabsStore {
@@ -18,6 +18,7 @@ interface TabsStore {
     removeTab: (i: number) => void
     setActiveTab: (tab_id: string) => void
     setSaved(tab_id: string, saved: boolean): void
+    reset(): void
 }
 
 const useTabs = create(
@@ -73,7 +74,12 @@ const useTabs = create(
                         }
                     })
                 )
-            }
+            },
+            reset() {
+                set(() => {
+                    return { tabs: [], activeTabId: null }
+                })
+            },
         }),
         {
             name: 'tabs-store',

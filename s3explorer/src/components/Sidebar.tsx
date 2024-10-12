@@ -1,14 +1,24 @@
-import { FolderDotIcon, SearchIcon, Settings, XCircle } from 'lucide-react'
+import {
+    FolderDotIcon,
+    SearchIcon,
+    Settings,
+    Settings2,
+    XCircle,
+} from 'lucide-react'
 import React, { useEffect, useMemo } from 'react'
 import useTabs from '../store/tab-store'
 import { Button } from './ui/button'
 import mixpanel from 'mixpanel-browser'
 import BucketTools from './BucketTools'
 import useBucketStore from '../store/buckets'
+import useSettingsStore from '../store/settings'
+import { addAlpha } from '../utils'
 
 function Sidebar() {
     const { tabs, activeTabId, addTab } = useTabs()
     const { buckets, setBuckets, loading, setLoading } = useBucketStore()
+    const { accentColor } = useSettingsStore()
+
     const [searchTerm, setSearchTerm] = React.useState<string>('')
 
     const activeTab = useMemo(
@@ -61,7 +71,7 @@ function Sidebar() {
                             style={{
                                 backgroundColor:
                                     activeTab?.name === bucket
-                                        ? 'rgba(0,0,0,0.1)'
+                                        ? addAlpha(accentColor, 0.1)
                                         : 'transparent',
                             }}
                             key={bucket}
@@ -107,6 +117,25 @@ function Sidebar() {
             >
                 <Settings size={18} /> <span>Settings</span>
             </Button>
+            {import.meta.url.includes('localhost') && (
+                <Button
+                    onClick={() => {
+                        addTab(
+                            {
+                                name: 'Developer center',
+                                id: 'developer',
+                                type: 'developer',
+                                saved: true,
+                            },
+                            true
+                        )
+                    }}
+                    className="flex text-slate-700 text-xs hover:dark:bg-slate-700 dark:bg-slate-950 dark:text-slate-400 m-2 p-1 gap-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400"
+                >
+                    <Settings2 size={18} />
+                    Developer center
+                </Button>
+            )}
         </div>
     )
 }

@@ -26,6 +26,7 @@ interface AccountsStore {
     ) => void
     removeAccount: (i: number) => void
     setActiveAccount: (account_id: string) => void
+    reset: () => void
 }
 
 const useAccountsStore = create(
@@ -66,6 +67,7 @@ const useAccountsStore = create(
                         state.accounts.find((acc) => acc.name === account_id) ||
                         null,
                 })),
+            reset: () => set({ accounts: [], active_account: null }),
         }),
         {
             name: 'accounts-store',

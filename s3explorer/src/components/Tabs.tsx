@@ -3,6 +3,7 @@ import React, { useEffect, useMemo, lazy } from 'react'
 import useTabs, { Tab } from '../store/tab-store'
 import { isImageFileByKey } from '../utils'
 import useSettingsStore from '../store/settings'
+import DeveloperCenter from './DeveloperCenter'
 
 const SettingsPage = lazy(() => import('./Settings'))
 const TextEditor = lazy(() => import('./Editor'))
@@ -63,6 +64,8 @@ const Tabs: React.FC = () => {
                 return <SettingsPage />
             case 'folder':
                 return <FolderContent active_bucket={tab.id} />
+            case 'developer':
+                return <DeveloperCenter />
         }
     }
 

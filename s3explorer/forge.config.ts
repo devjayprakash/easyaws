@@ -8,8 +8,6 @@ import type { ForgeConfig } from '@electron-forge/shared-types'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
 import path from 'path'
 
-console.log(__dirname)
-
 const config: ForgeConfig = {
     packagerConfig: {
         asar: true,
@@ -55,16 +53,6 @@ const config: ForgeConfig = {
             [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
             [FuseV1Options.OnlyLoadAppFromAsar]: true,
         }),
-    ],
-    publishers: [
-        {
-            name: '@electron-forge/publisher-s3',
-            config: {
-                bucket: 'easy-aws-s3explorer',
-                public: false,
-                region: 'us-east-1',
-            },
-        },
     ],
 }
 

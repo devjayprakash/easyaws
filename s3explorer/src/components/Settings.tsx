@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import useSettingsStore from '../store/settings'
 import { ModeToggle } from './ModeToggle'
 import { useTheme } from './ThemeProvider'
 import { Card } from './ui/card'
 import mixpanel from 'mixpanel-browser'
+import debounce from 'lodash/debounce'
 
 function SettingsPage() {
-    const { setEditorTheme } = useSettingsStore()
+    const { setEditorTheme, setAccentColor } = useSettingsStore()
     const { setTheme } = useTheme()
+
+    const setAccentColorDebounced = useCallback(
+        debounce(setAccentColor, 1000),
+        []
+    )
 
     return (
         <div className="p-3">
@@ -50,6 +56,24 @@ function SettingsPage() {
                                 })
                                 setEditorTheme(theme)
                             }}
+                        />
+                    </div>
+                </div>
+            </Card>
+            <Card className="p-3 mt-4">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h3 className="text-lg font-semibold">Editor Theme</h3>
+                        <p className="text-sm text-muted-foreground">
+                            Accept color
+                        </p>
+                    </div>
+                    <div>
+                        <input
+                            onChange={(ev) => {
+                                setAccentColorDebounced(ev.target.value)
+                            }}
+                            type="color"
                         />
                     </div>
                 </div>
