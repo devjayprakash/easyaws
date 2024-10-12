@@ -12,6 +12,7 @@ const config: ForgeConfig = {
     packagerConfig: {
         asar: true,
         icon: path.join(__dirname, 'src/images/icon'),
+        tmpdir: false,
     },
     rebuildConfig: {},
     makers: [
