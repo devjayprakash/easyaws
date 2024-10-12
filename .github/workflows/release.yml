@@ -21,12 +21,16 @@ jobs:
     steps:
       - name: Github checkout
         uses: actions/checkout@v4
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
+
+      - name: Install yarn
+        run: npm install -g yarn
+
       - name: Publish app
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run publish
+        run: yarn run publish
