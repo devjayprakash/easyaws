@@ -1,22 +1,30 @@
 import { FolderDotIcon, SearchIcon, Settings, XCircle } from 'lucide-react'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import useTabs from '../store/tab-store'
 import { Button } from './ui/button'
 import mixpanel from 'mixpanel-browser'
+import BucketTools from './BucketTools'
+import useBucketStore from '../store/buckets'
 
 function Sidebar() {
-    const [buckets, setBuckets] = React.useState<Array<string>>([])
+    const { tabs, activeTabId, addTab } = useTabs()
+    const { buckets, setBuckets, loading, setLoading } = useBucketStore()
     const [searchTerm, setSearchTerm] = React.useState<string>('')
 
-    const { addTab } = useTabs()
+    const activeTab = useMemo(
+        () => tabs.find((tab) => tab.id === activeTabId),
+        [activeTabId, tabs]
+    )
 
     useEffect(() => {
         const getBucketData = async () => {
+            setLoading(true)
             mixpanel.track('get_buckets', {
                 event: 'get_buckets',
             })
             const result = await window.s3_api.getBuckets()
             setBuckets(result.map((r) => r.Name))
+            setLoading(false)
         }
         getBucketData()
     }, [])
@@ -29,7 +37,7 @@ function Sidebar() {
                     value={searchTerm}
                     type="text"
                     placeholder="Search buckets"
-                    className="p-2 outline-none w-full dark:bg-gray-800 bg-gray-300 dark:text-white text-sm"
+                    className="py-2 placeholder:text-sm outline-none w-full dark:bg-gray-800 bg-gray-300 dark:text-white text-xs"
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 {searchTerm && (
@@ -41,11 +49,21 @@ function Sidebar() {
                     />
                 )}
             </div>
-            <div className="flex-grow overflow-y-scroll mt-3 p-2 space-y-1">
+            <BucketTools hidden={!activeTab} />
+            {loading && (
+                <div className="text-xs text-gray-400 p-2">Loading...</div>
+            )}
+            <div className="flex-grow overflow-y-auto p-2 x-2 space-y-1">
                 {buckets
                     .filter((b) => b.includes(searchTerm))
                     .map((bucket) => (
                         <div
+                            style={{
+                                backgroundColor:
+                                    activeTab?.name === bucket
+                                        ? 'rgba(0,0,0,0.1)'
+                                        : 'transparent',
+                            }}
                             key={bucket}
                             onClick={() => {
                                 mixpanel.track('clicked_on_bucket', {
@@ -57,17 +75,18 @@ function Sidebar() {
                                         name: bucket,
                                         id: bucket,
                                         type: 'folder',
+                                        saved: true,
                                     },
                                     true
                                 )
                             }}
-                            className="p-2 flex items-center gap-2 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150"
+                            className="p-2 flex items-center gap-2 text-gray-600 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150"
                         >
                             <FolderDotIcon
-                                size={20}
+                                size={16}
                                 className="flex-shrink-0 "
                             />
-                            <div className="text-sm truncate">{bucket}</div>
+                            <div className="text-xs truncate">{bucket}</div>
                         </div>
                     ))}
             </div>
@@ -79,13 +98,14 @@ function Sidebar() {
                             name: 'Settings',
                             id: 'settings',
                             type: 'settings',
+                            saved: true,
                         },
                         true
                     )
                 }}
-                className="flex text-black hover:dark:bg-slate-700 dark:bg-slate-950 dark:text-slate-400 m-2 p-2 gap-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400"
+                className="flex text-slate-700 text-xs hover:dark:bg-slate-700 dark:bg-slate-950 dark:text-slate-400 m-2 p-1 gap-2 cursor-pointer bg-gray-300 rounded-md hover:bg-gray-400"
             >
-                <Settings /> <span>Settings</span>
+                <Settings size={18} /> <span>Settings</span>
             </Button>
         </div>
     )

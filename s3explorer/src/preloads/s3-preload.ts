@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron'
 import {
+    createBucket,
     getBuckets,
     getObjectContent,
     getObjectsInsideABucket,
@@ -12,6 +13,19 @@ import {
 const cache: { [e: string]: any } = {}
 
 const preload_scripts_s3 = {
+    createBucketPreload: async (bucket_name: string) => {
+        try {
+        return (await ipcRenderer.invoke(
+            'create-bucket',
+            bucket_name
+        )) as ReturnType<typeof createBucket>
+        }catch(error){
+            if (new String(error).split(' ').find((e) => e.includes('BucketAlreadyExists:'))) {
+                return 'BucketAlreadyExists'
+            }
+            return null
+        }
+    },
     getPresignedUrl: async (key: string, bucket: string) => {
         if (cache[key]) {
             return cache[key]

@@ -22,6 +22,7 @@ const useFile = (
                     id: content.key,
                     type: 'file',
                     bucket_id: active_bucket,
+                    saved: true,
                 },
                 true
             )

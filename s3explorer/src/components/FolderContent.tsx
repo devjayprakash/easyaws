@@ -8,6 +8,7 @@ import GridFileItem from './GridFileItem'
 import ListFileItem from './ListFileItem'
 import Toolbar from './Toolbar'
 import mixpanel from 'mixpanel-browser'
+import { File } from 'lucide-react'
 
 const FolderContent: React.FC<{
     active_bucket: string
@@ -84,7 +85,14 @@ const FolderContent: React.FC<{
                 }}
             />
 
-            {state.layout === 'list' && (
+            {state.currentTree.length === 0 && (
+                <div className="flex-grow flex-col flex items-center justify-center text-xl text-gray-400 gap-3">
+                    <File size={54} />
+                    No files or folders
+                </div>
+            )}
+
+            {state.currentTree.length > 0 && state.layout === 'list' && (
                 <div className="overflow-auto mt-6 flex-grow mx-6">
                     <table className="table w-full table-auto border-separate border-spacing-0 border-spacing-y-2">
                         <thead>
@@ -110,7 +118,7 @@ const FolderContent: React.FC<{
                     </table>
                 </div>
             )}
-            {state.layout === 'grid' && (
+            {state.currentTree.length > 0 && state.layout === 'grid' && (
                 <div className={`px-6 flex-grow overflow-scroll`}>
                     <div className="flex flex-wrap gap-3 ">
                         {state.currentTree

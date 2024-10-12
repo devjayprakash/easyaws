@@ -1,14 +1,17 @@
 import { File, Folder, XIcon, Settings, FolderArchiveIcon } from 'lucide-react'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, lazy } from 'react'
 import useTabs, { Tab } from '../store/tab-store'
-import FolderContent from './FolderContent'
 import { isImageFileByKey } from '../utils'
-import ImageViewer from './ImageViewer'
-import TextEditor from './Editor'
-import SettingsPage from './Settings'
+import useSettingsStore from '../store/settings'
+
+const SettingsPage = lazy(() => import('./Settings'))
+const TextEditor = lazy(() => import('./Editor'))
+const ImageViewer = lazy(() => import('./ImageViewer'))
+const FolderContent = lazy(() => import('./FolderContent'))
 
 const Tabs: React.FC = () => {
     const { tabs, removeTab, setActiveTab, activeTabId } = useTabs()
+    const { accentColor } = useSettingsStore()
 
     const active_tab = useMemo(
         () => tabs.find((tab) => tab.id === activeTabId),
@@ -74,9 +77,16 @@ const Tabs: React.FC = () => {
                             }
                         }}
                         key={tab.name}
+                        style={{
+                            borderTop: `2px solid ${
+                                tab.id === activeTabId
+                                    ? accentColor
+                                    : 'transparent'
+                            }`,
+                        }}
                         className={`px-3 max-w-[220px] select-none truncate py-1 flex-shrink-0 flex gap-2 items-center cursor-pointer text-sm border-t-[2px] border-r dark:border-gray-600 ${
                             tab.id === activeTabId
-                                ? 'dark:text-white dark:border-t-sky-400 border-t-sky-400'
+                                ? 'dark:text-white'
                                 : 'dark:bg-gray-950 dark:text-gray-400'
                         }`}
                     >

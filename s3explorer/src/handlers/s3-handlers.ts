@@ -1,4 +1,5 @@
 import {
+    CreateBucketCommand,
     GetObjectCommand,
     ListBucketsCommand,
     ListObjectsV2Command,
@@ -37,6 +38,11 @@ export const getObjectsInsideABucket = async (
             Bucket: bucket,
         })
     )
+
+    if (!result.Contents) {
+        return []
+    }
+
     return result.Contents.filter((c) => ({
         Key: c.Key,
         Size: c.Size,
@@ -148,6 +154,16 @@ export const validateCredentials = async (
     }
 }
 
+export const createBucket = async (_ : Electron.IpcMainInvokeEvent , bucket_name : string) => {
+    const s3 = s3Provider.getS3Client()
+    const result = await s3.send(
+        new CreateBucketCommand({
+            Bucket: bucket_name 
+        })
+    )
+    return result
+}
+
 const startS3Handlers = async () => {
     ipcMain.handle('get-presigned-url', getPresignedUrl)
     ipcMain.handle('save-object-content', saveObjectContent)
@@ -156,6 +172,7 @@ const startS3Handlers = async () => {
     ipcMain.handle('get-objects', getObjectsInsideABucket)
     ipcMain.handle('set-credentials', setCredentials)
     ipcMain.handle('validate-credentials', validateCredentials)
+    ipcMain.handle('create-bucket', createBucket)
 }
 
 export default startS3Handlers

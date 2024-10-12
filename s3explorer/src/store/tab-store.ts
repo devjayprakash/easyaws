@@ -8,6 +8,7 @@ export interface Tab {
     name: string
     type?: 'folder' | 'file' | 'settings'
     bucket_id?: string
+    saved : boolean 
 }
 
 interface TabsStore {
@@ -16,6 +17,7 @@ interface TabsStore {
     addTab: (tab: Tab, set_active: boolean) => void
     removeTab: (i: number) => void
     setActiveTab: (tab_id: string) => void
+    setSaved(tab_id: string, saved: boolean): void
 }
 
 const useTabs = create(
@@ -62,6 +64,16 @@ const useTabs = create(
                     return { activeTabId: tab_id }
                 })
             },
+            setSaved(tab_id, saved) {
+                set((state) =>
+                    produce(state, (cpy) => {
+                        const tab = cpy.tabs.find((t) => t.id === tab_id)
+                        if (tab) {
+                            tab.saved = saved
+                        }
+                    })
+                )
+            }
         }),
         {
             name: 'tabs-store',

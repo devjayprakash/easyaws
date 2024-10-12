@@ -59,6 +59,7 @@
         "@radix-ui/react-popover": "^1.1.1",
         "@radix-ui/react-slot": "^1.1.0",
         "@radix-ui/react-toast": "^1.2.1",
+        "@radix-ui/react-tooltip": "^1.1.2",
         "@smithy/hash-node": "^3.0.3",
         "@smithy/protocol-http": "^4.0.3",
         "@smithy/url-parser": "^3.0.3",

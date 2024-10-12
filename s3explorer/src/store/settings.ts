@@ -5,6 +5,8 @@ import storage from './store-storage'
 interface SettingsState {
     editorTheme: 'dark' | 'light' | 'system'
     setEditorTheme: (theme: 'dark' | 'light' | 'system') => void
+    accentColor: string
+    setAccentColor: (color: string) => void
 }
 
 const useSettingsStore = create(
@@ -12,6 +14,8 @@ const useSettingsStore = create(
         (set) => ({
             editorTheme: 'system',
             setEditorTheme: (theme) => set({ editorTheme: theme }),
+            accentColor: '#2563EB',
+            setAccentColor: (color) => set({ accentColor: color }),
         }),
         {
             name: 'settings-store',
