@@ -6,13 +6,11 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses'
 import { VitePlugin } from '@electron-forge/plugin-vite'
 import type { ForgeConfig } from '@electron-forge/shared-types'
 import { FuseV1Options, FuseVersion } from '@electron/fuses'
-import path from 'path'
 
 const config: ForgeConfig = {
     packagerConfig: {
         asar: true,
-        icon: path.join(__dirname, 'src/images/icon'),
-        tmpdir: false,
+        // icon: path.join(__dirname, 'src/images/icon'),
     },
     rebuildConfig: {},
     makers: [
