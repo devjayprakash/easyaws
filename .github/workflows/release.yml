@@ -30,6 +30,9 @@ jobs:
       - name: Install yarn
         run: npm install -g yarn
 
+      - name: Install dependencies 
+        run: yarn install
+        
       - name: Publish app
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
