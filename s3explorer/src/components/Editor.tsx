@@ -1,4 +1,4 @@
-import { Editor } from '@monaco-editor/react';
+import { Editor  } from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react';
 import useSettingsStore from '../store/settings';
 import { extensionData } from '../utils';
@@ -55,6 +55,7 @@ const TextEditor: React.FC<{ obj_key: string; bucket: string }> = ({
       window.removeEventListener('keydown', handleSave);
     };
   }, [value]);
+
 
   return (
     <div className="h-screen">

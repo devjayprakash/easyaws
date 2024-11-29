@@ -33,7 +33,7 @@ function Sidebar() {
                 event: 'get_buckets',
             })
             const result = await window.s3_api.getBuckets()
-            setBuckets(result.map((r) => r.Name))
+            setBuckets(result.map((r) => r?.Name))
             setLoading(false)
         }
         getBucketData()
@@ -68,12 +68,6 @@ function Sidebar() {
                     .filter((b) => b.includes(searchTerm))
                     .map((bucket) => (
                         <div
-                            style={{
-                                backgroundColor:
-                                    activeTab?.name === bucket
-                                        ? addAlpha(accentColor, 0.1)
-                                        : 'transparent',
-                            }}
                             key={bucket}
                             onClick={() => {
                                 mixpanel.track('clicked_on_bucket', {
@@ -90,7 +84,11 @@ function Sidebar() {
                                     true
                                 )
                             }}
-                            className="p-2 flex items-center gap-2 text-gray-600 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150"
+                            className={`${
+                                activeTab?.name === bucket
+                                    ? `bg-[${accentColor}]/40`
+                                    : 'bg-transparent'
+                            } p-2 flex items-center gap-2 text-gray-600 dark:text-gray-300 rounded-md cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-800 duration-150`}
                         >
                             <FolderDotIcon
                                 size={16}

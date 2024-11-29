@@ -13,7 +13,7 @@ const DeveloperCenter: React.FC = () => {
     const { reset: resetBuckets } = useBucketStore()
 
     return (
-        <div className="p-3">
+        <div className="p-3 w-[80vw]">
             <h1 className="text-2xl">Developer center</h1>
             <Card className="mt-5">
                 <CardDescription className="flex justify-between p-3 items-center">

@@ -38,6 +38,7 @@ const router = createHashRouter([
 ])
 
 function App() {
+
     return (
         <Suspense fallback={<div>Loading ...</div>}>
             <ThemeProvider defaultTheme="dark" storageKey="theme-key">
